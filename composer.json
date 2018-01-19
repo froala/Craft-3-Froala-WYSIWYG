@@ -1,6 +1,6 @@
 {
-  "name": "froala/craft-froala-editor",
-  "description": "Craft CMS plugin for Froala WYSIWYG HTML Rich Text Editor.",
+  "name": "froala/craft-froala-wysiwyg",
+  "description": "Craft 3 CMS plugin for Froala WYSIWYG HTML Rich Text Editor.",
   "type": "craft-plugin",
   "version": "2.7.3-alpha",
   "keywords": [
@@ -27,6 +27,6 @@
     "hasSettings": true,
     "developer": "Bert Oost",
     "developerUrl": "https://bertoost.com",
-    "documentationUrl": "https://github.com/froala/Craft-Froala-WYSIWYG/blob/master/README.md"
+    "documentationUrl": "https://github.com/froala/Craft-3-Froala-WYSIWYG/blob/master/README.md"
   }
 }
