@@ -4,7 +4,7 @@
 {% block fields %}
     {{ forms.checkboxSelectField({
         id: 'froala-settings-enabled-plugins',
-        name: 'enabledPlugins',
+        name: 'settings[enabledPlugins]',
         label: 'Enabled Plugins'|t('froala-editor'),
         instructions: 'Enable or disable plugins to use for the editor. This is the overall setting. Fields can have their own enabled plugins, limited to this list.'|t('froala-editor'),
         options: plugins,

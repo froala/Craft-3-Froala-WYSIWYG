@@ -29,7 +29,7 @@
                 <div class="select">
                     {{ select({
                         id: name ~ 'Type',
-                        name: name ~ 'Type',
+                        name: 'settings[' ~ name ~ 'Type]',
                         options: customCssOptions,
                         value: settings[name ~ 'Type'],
                     }) }}
@@ -39,7 +39,7 @@
                 {{ text({
                     id: name ~ 'File',
                     class: 'ltr',
-                    name: name ~ 'File',
+                    name: 'settings[' ~ name ~ 'File]',
                     value: settings[name ~ 'File'],
                     placeholder: "path/to/css/file.css"|t
                 }) }}
@@ -55,7 +55,7 @@
             <td class="thin">
                 {{ select({
                     id: name ~ 'Source',
-                    name: name ~ 'Source',
+                    name: 'settings[' ~ name ~ 'Source]',
                     options: sourceOptions,
                     value: settings[name ~ 'Source'],
                 }) }}
@@ -64,7 +64,7 @@
                 {{ text({
                     id: name ~ 'SubPath',
                     class: 'ltr',
-                    name: name ~ 'SubPath',
+                    name: 'settings[' ~ name ~ 'SubPath]',
                     value: settings[name ~ 'SubPath'],
                     placeholder: "path/to/subfolder"|t
                 }) }}

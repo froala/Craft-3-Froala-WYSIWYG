@@ -3,7 +3,7 @@
 
 {% block fields %}
     {{ forms.textField({
-        name: 'licenseKey',
+        name: 'settings[licenseKey]',
         label: 'License key'|t('froala-editor'),
         instructions: 'The license key for Froala editor usage on the current domain.'|t('froala-editor'),
         value: settings.licenseKey,

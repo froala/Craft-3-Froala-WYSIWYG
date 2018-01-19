@@ -26,11 +26,11 @@ class SettingsController extends Controller
         }
 
         $tabs = [
-            'general' => [
+            'general'   => [
                 'label' => Craft::t('app', 'General'),
                 'url'   => UrlHelper::cpUrl('froala-editor/settings/general'),
             ],
-            'plugins' => [
+            'plugins'   => [
                 'label' => Craft::t('app', 'Plugins'),
                 'url'   => UrlHelper::cpUrl('froala-editor/settings/plugins'),
             ],
