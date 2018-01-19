@@ -1,0 +1,74 @@
+{% macro customCssInput(name, settings) %}
+    {% from "_includes/forms" import select, text -%}
+
+    {% set customCssOptions = [
+        { label : 'Default', value: '' }
+    ] -%}
+
+    {# add-in asset resources -#}
+    {% set craftVolumes = craft.app.volumes.getAllVolumes() -%}
+    {% if craftVolumes is not empty -%}
+        {% set customCssOptions = customCssOptions|merge([{ optgroup: 'Volumes' }]) -%}
+        {% for volume in craftVolumes -%}
+            {% set customCssOptions = customCssOptions|merge({ ('volume:' ~ volume.id): volume.name }) -%}
+        {%- endfor %}
+    {%- endif %}
+
+    {# add-in plugins -#}
+    {% set craftPlugins = craft.app.plugins.getAllPluginInfo() -%}
+    {% if craftPlugins is not empty -%}
+        {% set customCssOptions = customCssOptions|merge([{ optgroup: 'Plugin resource' }]) -%}
+        {% for pluginHandle, plugin in craftPlugins -%}
+            {% set customCssOptions = customCssOptions|merge({ ('plugin:' ~ pluginHandle): plugin.name }) -%}
+        {%- endfor %}
+    {%- endif %}
+
+    <div class="input ltr">
+        <div class="flex">
+            <div>
+                <div class="select">
+                    {{ select({
+                        id: name ~ 'Type',
+                        name: name ~ 'Type',
+                        options: customCssOptions,
+                        value: settings[name ~ 'Type'],
+                    }) }}
+                </div>
+            </div>
+            <div class="flex-grow">
+                {{ text({
+                    id: name ~ 'File',
+                    class: 'ltr',
+                    name: name ~ 'File',
+                    value: settings[name ~ 'File'],
+                    placeholder: "path/to/css/file.css"|t
+                }) }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro uploadLocationInput(name, settings, sourceOptions) %}
+    {% from "_includes/forms" import select, text %}
+    <table class="inputs fullwidth">
+        <tr>
+            <td class="thin">
+                {{ select({
+                    id: name ~ 'Source',
+                    name: name ~ 'Source',
+                    options: sourceOptions,
+                    value: settings[name ~ 'Source'],
+                }) }}
+            </td>
+            <td>
+                {{ text({
+                    id: name ~ 'SubPath',
+                    class: 'ltr',
+                    name: name ~ 'SubPath',
+                    value: settings[name ~ 'SubPath'],
+                    placeholder: "path/to/subfolder"|t
+                }) }}
+            </td>
+        </tr>
+    </table>
+{% endmacro %}

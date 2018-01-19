@@ -1,0 +1,15 @@
+{% extends 'froala-editor/_layouts/cp' %}
+
+{% set fullPageForm = true %}
+
+{% set crumbs = [
+    { label: "Settings"|t('app'), url: url('settings') },
+    { label: "Plugins"|t('app'), url: url('settings/plugins') }
+] %}
+
+{% block content %}
+    <input type="hidden" name="action" value="froala-editor/settings/save">
+    <input type="hidden" name="pluginHandle" value="froala-editor">
+
+    {% block fields %}{% endblock %}
+{% endblock %}

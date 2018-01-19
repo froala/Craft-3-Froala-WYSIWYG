@@ -1,0 +1,13 @@
+{% extends 'froala-editor/_layouts/settings' %}
+{% import "_includes/forms" as forms %}
+
+{% block fields %}
+    {{ forms.textField({
+        name: 'licenseKey',
+        label: 'License key'|t('froala-editor'),
+        instructions: 'The license key for Froala editor usage on the current domain.'|t('froala-editor'),
+        value: settings.licenseKey,
+        first: true,
+        autofocus: true
+    }) }}
+{% endblock %}

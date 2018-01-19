@@ -1,0 +1,63 @@
+<?php
+
+namespace froala\craftfroalawysiwyg;
+
+use Craft;
+use craft\services\Fields;
+use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterUrlRulesEvent;
+use craft\web\UrlManager;
+use yii\base\Event;
+
+/**
+ * Class Plugin
+ */
+class Plugin extends \craft\base\Plugin
+{
+    /**
+     * @var Plugin
+     */
+    public static $plugin;
+
+    /**
+     * @var bool
+     */
+    public $hasCpSettings = true;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+
+        self::$plugin = $this;
+
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function (RegisterComponentTypesEvent $e) {
+            $e->types[] = Field::class;
+        });
+
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
+            $event->rules['froala-editor/settings'] = 'froala-editor/settings/show';
+            $event->rules['froala-editor/settings/<settingsType:{handle}>'] = 'froala-editor/settings/show';
+        });
+    }
+
+    /**
+     * @return \froala\craftfroalawysiwyg\models\Settings
+     */
+    protected function createSettingsModel()
+    {
+        return new \froala\craftfroalawysiwyg\models\Settings();
+    }
+
+    /**
+     * @return mixed|\yii\web\Response
+     */
+    public function getSettingsResponse()
+    {
+        $url = \craft\helpers\UrlHelper::cpUrl('froala-editor/settings/general');
+
+        return Craft::$app->controller->redirect($url);
+    }
+}

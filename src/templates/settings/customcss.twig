@@ -1,0 +1,28 @@
+{% extends 'froala-editor/_layouts/settings' %}
+{% import "_includes/forms" as forms %}
+{% import "froala-editor/_includes/macros" as macros -%}
+
+{% block fields %}
+    {{ forms.field({
+        label: 'CSS File'|t('froala-editor'),
+        instructions: 'Include a custom style file for the editor to display content in your style. This file path could be inside a Volume or a Plugin resource or should be a relative to your site\'s document root path.'|t('froala-editor')
+    }, macros.customCssInput('customCss', settings)) }}
+
+    {{ forms.editableTableField({
+        id: 'customCssClasses',
+        name: 'customCssClasses',
+        label: 'Extra CSS Classes'|t('froala-editor'),
+        instructions: 'Add extra Paragraph Style classes.'|t('froala-editor'),
+        rows: settings.customCssClasses,
+        cols: {
+            className: {
+                heading: 'CSS Class Name(s))'|t('froala-editor'),
+                type: 'text'
+            },
+            displayName: {
+                heading: 'Display Name'|t('froala-editor'),
+                type: 'text'
+            }
+        }
+    }) }}
+{% endblock %}
