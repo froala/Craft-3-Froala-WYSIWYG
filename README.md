@@ -2,14 +2,14 @@
 
 The implementation of the Froala Editor (license not included) for Craft CMS (v3)
 
-[Check the Craft CMS v2 version here](https://github.com/froala/Craft-Froala-WYSIWYG/tree/v2)
+__[Check the Craft CMS v2 version here](https://github.com/froala/Craft-Froala-WYSIWYG/blob/master/README.md)__
 
 ## Installation
 
 Tell composer to load the plugin
 
 ```terminal
-composer require froala/craft-froala-editor
+composer require froala/craft-froala-wysiwyg
 ```
 
 ## Get your license
@@ -22,11 +22,11 @@ Once you have a license, for your domain, you can enter the license key in the p
 
 We're working on the Craft CMS v3 implementation. A couple of things have to be fixed before we will guarantee the plugin to work. Please be a little patience.
 
-- [ ] Settings to enable/disable editor plugins
-- [ ] Field settings to override enable/disable plugins
+- [x] Settings to enable/disable editor plugins
+- [x] Field settings to override enable/disable plugins
 - [ ] Using Craft modals for uploading/selecting images
 - [ ] Using Craft modals for uploading/selecting files
-- [ ] Add ability to link to other entries in the system
+- [x] Add ability to link to other entries in the system
 - [ ] Tweaking the plugin needs (releases.json, etc.)
 
 ## License
