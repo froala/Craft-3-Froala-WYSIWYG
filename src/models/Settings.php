@@ -33,15 +33,4 @@ class Settings extends Model
      * @var string|array
      */
     public $enabledPlugins = '*';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['licenseKey'], 'required'],
-            [['enabledPlugins'], 'required'],
-        ];
-    }
 }

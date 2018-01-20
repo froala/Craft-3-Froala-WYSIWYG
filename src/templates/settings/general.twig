@@ -10,4 +10,11 @@
         first: true,
         autofocus: true
     }) }}
+
+    {% if settings.licenseKey is empty %}
+        <div class="warning">
+            The Craft CMS plugin does not include a license for the editor. To get one, visit the
+            <a href="https://www.froala.com/wysiwyg-editor/pricing" target="_blank">Froala website</a>.
+        </div>
+    {% endif %}
 {% endblock %}
