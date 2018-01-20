@@ -1,7 +1,9 @@
 (function ($) {
 
     $.extend($.FE.DEFAULTS, {
-        craftElementSiteId: false
+        craftElementSiteId: false,
+        craftAssetElementType: false,
+        craftAssetElementRefHandle: false
     });
 
     /** global: Craft */

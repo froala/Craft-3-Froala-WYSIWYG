@@ -1,4 +1,4 @@
-{% macro customCssInput(name, settings) %}
+{% macro customCssInput(name, settings, isField) %}
     {% from "_includes/forms" import select, text -%}
 
     {% set customCssOptions = [
@@ -10,7 +10,7 @@
     {% if craftVolumes is not empty -%}
         {% set customCssOptions = customCssOptions|merge([{ optgroup: 'Volumes' }]) -%}
         {% for volume in craftVolumes -%}
-            {% set customCssOptions = customCssOptions|merge({ ('volume:' ~ volume.id): volume.name }) -%}
+            {% set customCssOptions = customCssOptions|merge({ ('folder:' ~ volume.id): volume.name }) -%}
         {%- endfor %}
     {%- endif %}
 
@@ -27,20 +27,22 @@
         <div class="flex">
             <div>
                 <div class="select">
+                    {% set fieldKey = name ~ 'Type' -%}
                     {{ select({
-                        id: name ~ 'Type',
-                        name: 'settings[' ~ name ~ 'Type]',
+                        id: fieldKey,
+                        name: (isField ? fieldKey : 'settings[' ~ fieldKey ~ ']'),
                         options: customCssOptions,
-                        value: settings[name ~ 'Type'],
+                        value: settings[fieldKey],
                     }) }}
                 </div>
             </div>
             <div class="flex-grow">
+                {% set fieldKey = name ~ 'Type' -%}
                 {{ text({
-                    id: name ~ 'File',
+                    id: fieldKey,
                     class: 'ltr',
-                    name: 'settings[' ~ name ~ 'File]',
-                    value: settings[name ~ 'File'],
+                    name: (isField ? fieldKey : 'settings[' ~ fieldKey ~ ']'),
+                    value: settings[fieldKey],
                     placeholder: "path/to/css/file.css"|t
                 }) }}
             </div>
@@ -48,27 +50,42 @@
     </div>
 {% endmacro %}
 
-{% macro uploadLocationInput(name, settings, sourceOptions) %}
+{% macro uploadLocationInput(name, settings) %}
     {% from "_includes/forms" import select, text %}
-    <table class="inputs fullwidth">
-        <tr>
-            <td class="thin">
-                {{ select({
-                    id: name ~ 'Source',
-                    name: 'settings[' ~ name ~ 'Source]',
-                    options: sourceOptions,
-                    value: settings[name ~ 'Source'],
-                }) }}
-            </td>
-            <td>
+
+    {% set volumeOptions = [
+        { label: 'Default webroot', value: '' }
+    ] -%}
+
+    {% set craftVolumes = craft.app.volumes.getAllVolumes() -%}
+    {% if craftVolumes is not empty -%}
+        {% set volumeOptions = volumeOptions|merge([{ optgroup: 'Volumes' }]) -%}
+        {% for volume in craftVolumes -%}
+            {% set volumeOptions = volumeOptions|merge({ ('folder:' ~ volume.id): volume.name }) -%}
+        {%- endfor %}
+    {%- endif %}
+
+    <div class="input ltr">
+        <div class="flex">
+            <div>
+                <div class="select">
+                    {{ select({
+                        id: name ~ 'Source',
+                        name: name ~ 'Source',
+                        options: volumeOptions,
+                        value: settings[name ~ 'Source'],
+                    }) }}
+                </div>
+            </div>
+            <div class="flex-grow">
                 {{ text({
                     id: name ~ 'SubPath',
                     class: 'ltr',
-                    name: 'settings[' ~ name ~ 'SubPath]',
+                    name: name ~ 'SubPath',
                     value: settings[name ~ 'SubPath'],
                     placeholder: "path/to/subfolder"|t
                 }) }}
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
 {% endmacro %}

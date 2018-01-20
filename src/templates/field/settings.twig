@@ -1,10 +1,25 @@
 {% import "_includes/forms" as forms %}
 {% import "froala-editor/_includes/macros" as macros %}
 
+{% set uploadInstructions = 'Where should files be uploaded when they are dragged directly onto the field, or uploaded from the front end?' %}
+{% set uploadInstructions = uploadInstructions ~ ' Note that the subfolder path can contain variables like <code>{slug}</code> or <code>{author.username}</code>.' %}
+
+{{ forms.field({
+    label: 'Images Location'|t,
+    instructions: uploadInstructions|t,
+}, macros.uploadLocationInput('assetsImages', field.settings)) }}
+
+{{ forms.field({
+    label: 'Files Location'|t,
+    instructions: uploadInstructions|t,
+}, macros.uploadLocationInput('assetsFiles', field.settings)) }}
+
+<hr>
+
 {{ forms.field({
     label: 'Custom CSS File'|t('froala-editor'),
     instructions: 'Include a custom style file for the editor to display content in your style. This file path could be inside a Volume or a Plugin resource or should be a relative to your site\'s document root path.'|t('froala-editor')
-}, macros.customCssInput('customCss', field.settings)) }}
+}, macros.customCssInput('customCss', field.settings, true)) }}
 
 {{ forms.editableTableField({
     id: 'customCssClasses',

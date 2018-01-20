@@ -4,6 +4,7 @@ namespace froala\craftfroalawysiwyg;
 
 use Craft;
 use craft\base\ElementInterface;
+use craft\elements\Asset;
 use craft\elements\Entry;
 use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
@@ -44,6 +45,26 @@ class Field extends \craft\base\Field
      * @var string The type of database column the field should have in the content table
      */
     public $columnType = Schema::TYPE_TEXT;
+
+    /**
+     * @var string
+     */
+    public $assetsImagesSource = '';
+
+    /**
+     * @var string
+     */
+    public $assetsImagesSubPath = '';
+
+    /**
+     * @var string
+     */
+    public $assetsFilesSource = '';
+
+    /**
+     * @var string
+     */
+    public $assetsFilesSubPath = '';
 
     /**
      * @var string
@@ -128,9 +149,11 @@ class Field extends \craft\base\Field
             'id'             => $nsId,
             'isAdmin'        => Craft::$app->user->getIsAdmin(),
             'editorConfig'   => [
-                'craftElementSiteId'        => $site->id,
-                'craftLinkElementType'      => Entry::class,
-                'craftLinkElementRefHandle' => Entry::refHandle(),
+                'craftElementSiteId'         => $site->id,
+                'craftLinkElementType'       => Entry::class,
+                'craftLinkElementRefHandle'  => Entry::refHandle(),
+                'craftAssetElementType'      => Asset::class,
+                'craftAssetElementRefHandle' => Asset::refHandle(),
             ],
             'pluginSettings' => $this->pluginSettings->toArray(),
             'fieldSettings'  => $this->getSettings(),
