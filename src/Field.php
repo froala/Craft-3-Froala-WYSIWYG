@@ -128,9 +128,9 @@ class Field extends \craft\base\Field
             'id'             => $nsId,
             'isAdmin'        => Craft::$app->user->getIsAdmin(),
             'editorConfig'   => [
+                'craftElementSiteId'        => $site->id,
                 'craftLinkElementType'      => Entry::class,
                 'craftLinkElementRefHandle' => Entry::refHandle(),
-                'craftLinkElementSiteId'    => $site->id,
             ],
             'pluginSettings' => $this->pluginSettings->toArray(),
             'fieldSettings'  => $this->getSettings(),

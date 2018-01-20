@@ -1,5 +1,9 @@
 (function ($) {
 
+    $.extend($.FE.DEFAULTS, {
+        craftElementSiteId: false
+    });
+
     /** global: Craft */
     /** global: Garnish */
     /**

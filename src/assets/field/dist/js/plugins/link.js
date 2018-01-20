@@ -5,8 +5,7 @@ $(function() {
         craftLinkSources: [],
         craftLinkStorageKey: false,
         craftLinkElementType: false,
-        craftLinkElementRefHandle: false,
-        craftLinkElementSiteId: false
+        craftLinkElementRefHandle: false
     });
 
     $.FE.DefineIcon('insertLinkEntry', { NAME: 'link' });
@@ -24,7 +23,7 @@ $(function() {
             var modal = Craft.createElementSelectorModal(this.opts.craftLinkElementType, {
                 storageKey: (this.opts.craftLinkStorageKey || 'FroalaInput.LinkTo.' + this.opts.craftLinkElementType),
                 sources: this.opts.craftLinkSources,
-                criteria: $.extend({ siteId: this.opts.craftLinkElementSiteId }, this.opts.craftLinkCriteria),
+                criteria: $.extend({ siteId: this.opts.craftElementSiteId }, this.opts.craftLinkCriteria),
                 onSelect: $.proxy(function(elements) {
                     if (elements.length) {
                         var element = elements[0],
@@ -41,7 +40,7 @@ $(function() {
         }
     });
 
-    $.FroalaEditor.RegisterCommand('linkEdit', {
+    $.FE.RegisterCommand('linkEdit', {
         callback: function (cmd, val) {
             var $currentLink = this.link.get();
 
@@ -64,5 +63,4 @@ $(function() {
             });
         }
     });
-
 });
