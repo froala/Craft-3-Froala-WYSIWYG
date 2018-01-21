@@ -17,11 +17,6 @@ use froala\craftfroalawysiwyg\services\FieldVolume;
 class Plugin extends \craft\base\Plugin
 {
     /**
-     * @var Plugin
-     */
-    public static $plugin;
-
-    /**
      * @var bool
      */
     public $hasCpSettings = true;
@@ -42,8 +37,6 @@ class Plugin extends \craft\base\Plugin
     public function init()
     {
         parent::init();
-
-        self::$plugin = $this;
 
         $this->setComponents([
             'fieldVolume' => FieldVolume::class,

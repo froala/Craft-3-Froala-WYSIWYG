@@ -54,7 +54,7 @@ class SettingsController extends Controller
         return $this->renderTemplate('froala-editor/settings/' . $routeParams['settingsType'], [
             'tabs'        => $tabs,
             'selectedTab' => $routeParams['settingsType'],
-            'settings'    => Plugin::$plugin->getSettings(),
+            'settings'    => Plugin::getInstance()->getSettings(),
             'plugins'     => $froalaAsset->getPlugins(),
         ]);
     }
