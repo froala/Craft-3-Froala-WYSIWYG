@@ -8,11 +8,7 @@ $(function() {
         craftLinkElementRefHandle: false
     });
 
-    $.FE.DefineIcon('insertLinkEntry', { NAME: 'link' });
-    $.FE.RegisterCommand('insertLinkEntry', {
-        title: 'Insert Link',
-        focus: true,
-        refreshAfterCallback: true,
+    $.FE.RegisterCommand('insertLink', $.extend($.FE.COMMANDS['insertLink'], {
         callback: function (cmd, val) {
             var _editor = this,
                 _selectedText = (this.selection.text() || false);
@@ -38,9 +34,9 @@ $(function() {
                 closeOtherModals: false
             });
         }
-    });
+    }));
 
-    $.FE.RegisterCommand('linkEdit', {
+    $.FE.RegisterCommand('linkEdit', $.extend($.FE.COMMANDS['linkEdit'], {
         callback: function (cmd, val) {
             var $currentLink = this.link.get();
 
@@ -62,5 +58,5 @@ $(function() {
                 closeOtherModals: false
             });
         }
-    });
+    }));
 });

@@ -200,26 +200,6 @@
                 buttons.push('html');
             }
 
-            // Craft replacements
-            for (var i = 0; i < buttons.length; i++) {
-                switch (buttons[i]) {
-                    case 'link':
-                    case 'insertLink':
-                        buttons[i] = 'insertLinkEntry';
-                        break;
-
-                    case 'image':
-                    case 'insertImage':
-                        buttons[i] = 'insertAssetImage';
-                        break;
-
-                    case 'file':
-                    case 'insertFile':
-                        buttons[i] = 'insertAssetFile';
-                        break;
-                }
-            }
-
             // Against enabled plugins
             // See https://www.froala.com/wysiwyg-editor/docs/options#toolbarButtons
             if (this.config.pluginsEnabled !== '*' && $.isArray(this.config.pluginsEnabled)) {

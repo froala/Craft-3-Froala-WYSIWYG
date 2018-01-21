@@ -7,11 +7,7 @@ $(function() {
         craftImageTransforms: []
     });
 
-    $.FE.DefineIcon('insertAssetImage', { NAME: 'image' });
-    $.FE.RegisterCommand('insertAssetImage', {
-        title: 'Insert Image',
-        focus: true,
-        refreshAfterCallback: true,
+    $.FE.RegisterCommand('insertImage', $.extend($.FE.COMMANDS['insertImage'], {
         callback: function (cmd, val) {
             var _editor = this;
 
@@ -43,9 +39,9 @@ $(function() {
                 transforms: this.opts.craftImageTransforms
             });
         }
-    });
+    }));
 
-    $.FE.RegisterCommand('imageReplace', {
+    $.FE.RegisterCommand('imageReplace', $.extend($.FE.COMMANDS['imageReplace'], {
         callback: function(cmd, val) {
             var _editor = this,
                 disabledElementIds = [],
@@ -91,5 +87,5 @@ $(function() {
                 transforms: this.opts.craftImageTransforms
             });
         }
-    });
+    }));
 });
