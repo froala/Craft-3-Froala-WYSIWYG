@@ -1,11 +1,5 @@
 (function ($) {
 
-    $.extend($.FE.DEFAULTS, {
-        craftElementSiteId: false,
-        craftAssetElementType: false,
-        craftAssetElementRefHandle: false
-    });
-
     /** global: Craft */
     /** global: Garnish */
     /**

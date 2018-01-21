@@ -25,9 +25,7 @@ class FieldAsset extends AssetBundle
         ];
 
         $this->js = [
-            'js/plugins/link.js',
-            'js/plugins/image.js',
-            'js/plugins/file.js',
+            'js/plugins/craft.js',
             'js/FroalaEditorConfig.js',
             'js/FroalaEditorInput.js',
         ];
