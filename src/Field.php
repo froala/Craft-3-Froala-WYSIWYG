@@ -46,42 +46,42 @@ class Field extends \craft\base\Field
     public $columnType = Schema::TYPE_TEXT;
 
     /**
-     * @var string
+     * @var string The image source to use with current field
      */
     public $assetsImagesSource = '';
 
     /**
-     * @var string
+     * @var string A configurable sub path within the image source selected
      */
     public $assetsImagesSubPath = '';
 
     /**
-     * @var string
+     * @var string The file source to use with current field
      */
     public $assetsFilesSource = '';
 
     /**
-     * @var string
+     * @var string A configurable sub path within the file source selected
      */
     public $assetsFilesSubPath = '';
 
     /**
-     * @var string
+     * @var string The custom source of injecting a CSS file
      */
     public $customCssType;
 
     /**
-     * @var string
+     * @var string The custom CSS file path within selected CSS type (source)
      */
     public $customCssFile;
 
     /**
-     * @var array
+     * @var array A list with custom CSS classes inside the editor
      */
     public $customCssClasses = [];
 
     /**
-     * @var bool
+     * @var bool Whether or not to override the plugin CSS classes inside the editor
      */
     public $customCssClassesOverride = false;
 
