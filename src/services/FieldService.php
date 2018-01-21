@@ -5,13 +5,14 @@ namespace froala\craftfroalawysiwyg\services;
 use craft\base\Component;
 use craft\errors\InvalidSubpathException;
 use craft\errors\InvalidVolumeException;
+use craft\helpers\Html;
 use craft\helpers\HtmlPurifier;
 use craft\models\VolumeFolder;
 
 /**
  * Class FieldVolume
  */
-class FieldVolume extends Component
+class FieldService extends Component
 {
     /**
      * @var \craft\elements\Entry|\craft\elements\User|null
@@ -27,6 +28,26 @@ class FieldVolume extends Component
     }
 
     /**
+     * Get available transforms.
+     *
+     * @return array
+     */
+    public function getTransforms()
+    {
+        $allTransforms = \Craft::$app->getAssetTransforms()->getAllTransforms();
+        $transformList = [];
+
+        foreach ($allTransforms as $transform) {
+            $transformList[] = [
+                'handle' => Html::encode($transform->handle),
+                'name' => Html::encode($transform->name)
+            ];
+        }
+
+        return $transformList;
+    }
+
+    /**
      * Returns the folder-id to store uploads in
      *
      * @param int $volumeId
@@ -38,15 +59,13 @@ class FieldVolume extends Component
      */
     public function determineFolderId($volumeId, $subPath, $createDynamicFolders = true)
     {
-        $folderId = null;
-
         try {
 
             if (!is_numeric($volumeId)) {
                 $volumeId = (integer) ltrim($volumeId, 'folder:');
             }
 
-            $folderId = $this->resolveSourcePathToFolderId($volumeId, $subPath, $createDynamicFolders);
+            $folder = $this->resolveSourcePathToFolderId($volumeId, $subPath, $createDynamicFolders);
 
         } catch (InvalidSubpathException $e) {
 
@@ -63,10 +82,8 @@ class FieldVolume extends Component
                     'name'     => $folderName,
                 ]);
 
-                if ($folder) {
-                    $folderId = $folder->id;
-                } else {
-                    $folderId = $this->_createSubFolder($userFolder, $folderName);
+                if (empty($folder)) {
+                    $folder = $this->_createSubFolder($userFolder, $folderName);
                 }
 
             } else {
@@ -75,12 +92,39 @@ class FieldVolume extends Component
             }
         }
 
-        if (!empty($folderId)) {
+        if (!empty($folder)) {
 
-            return 'folder:' . $folderId . ':single';
+            return $this->getFolderParentsById($folder);
         }
 
-        return $folderId;
+        return null;
+    }
+
+    /**
+     * @param VolumeFolder $folder
+     * @return string
+     */
+    private function getFolderParentsById($folder)
+    {
+        $tree = [];
+
+        // when reached folder already is the root folder
+        if (empty($folder->parentId)) {
+            $tree[] = 'folder:' . $folder->id;
+        } else {
+
+            $rootFolder = \Craft::$app->getAssets()->getRootFolderByVolumeId($folder->volumeId);
+            $tree[] = 'folder:' . $rootFolder->id;
+
+            $folderTree = \Craft::$app->getAssets()->getFolderTreeByFolderId($folder->id);
+            foreach ($folderTree as $folder) {
+
+                $tree[] = 'folder:' . $folder->id;
+            }
+        }
+
+        // return folder tree like 'folder:1/folder:2/folder:3' etc.
+        return implode('/', $tree);
     }
 
     /**
@@ -88,7 +132,7 @@ class FieldVolume extends Component
      * @param string $subPath
      * @param bool $createDynamicFolders
      *
-     * @return int|null
+     * @return VolumeFolder
      *
      * @throws InvalidSubpathException
      * @throws InvalidVolumeException
@@ -153,8 +197,8 @@ class FieldVolume extends Component
 
                     // Create it if it doesn't exist
                     if (!$folder) {
-                        $folderId = $this->_createSubFolder($parentFolder, $segment);
-                        $folder = \Craft::$app->getAssets()->getFolderById($folderId);
+                        $folder = $this->_createSubFolder($parentFolder, $segment);
+                        $folder = \Craft::$app->getAssets()->getFolderById($folder->id);
                     }
 
                     // In case there's another segment after this...
@@ -163,13 +207,13 @@ class FieldVolume extends Component
             }
         }
 
-        return $folder->id;
+        return $folder;
     }
 
     /**
      * @param VolumeFolder $currentFolder
      * @param string $folderName
-     * @return integer
+     * @return VolumeFolder
      * @throws \Exception
      */
     private function _createSubFolder(VolumeFolder $currentFolder, $folderName)
@@ -183,6 +227,6 @@ class FieldVolume extends Component
 
         \Craft::$app->getAssets()->createFolder($newFolder);
 
-        return $newFolder->id;
+        return $newFolder;
     }
 }

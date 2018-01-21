@@ -142,7 +142,7 @@ class Field extends \craft\base\Field
         $nsId = $view->namespaceInputId($id);
         $encValue = htmlentities((string) $value, ENT_NOQUOTES, 'UTF-8');
 
-        Plugin::getInstance()->fieldVolume->setElement($element);
+        Plugin::getInstance()->fieldService->setElement($element);
 
         // start input editor settings
         $site = ($element ? $element->getSite() : Craft::$app->getSites()->currentSite);
@@ -155,16 +155,19 @@ class Field extends \craft\base\Field
                 'craftLinkElementRefHandle'  => Entry::refHandle(),
                 'craftAssetElementType'      => Asset::class,
                 'craftAssetElementRefHandle' => Asset::refHandle(),
-            ],
-            'sources'        => [
-                'images' => Plugin::getInstance()->fieldVolume->determineFolderId(
-                    $this->assetsImagesSource,
-                    $this->assetsImagesSubPath
-                ),
-                'files'  => Plugin::getInstance()->fieldVolume->determineFolderId(
-                    $this->assetsFilesSource,
-                    $this->assetsFilesSubPath
-                ),
+                'craftImageTransforms'       => Plugin::getInstance()->fieldService->getTransforms(),
+                'craftImageSources'          => [
+                    Plugin::getInstance()->fieldService->determineFolderId(
+                        $this->assetsImagesSource,
+                        $this->assetsImagesSubPath
+                    ),
+                ],
+                'craftFileSources'           => [
+                    Plugin::getInstance()->fieldService->determineFolderId(
+                        $this->assetsFilesSource,
+                        $this->assetsFilesSubPath
+                    ),
+                ],
             ],
             'pluginSettings' => $this->pluginSettings->toArray(),
             'fieldSettings'  => $this->getSettings(),

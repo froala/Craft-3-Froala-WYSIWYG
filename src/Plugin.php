@@ -9,7 +9,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\web\UrlManager;
 use yii\base\Event;
 
-use froala\craftfroalawysiwyg\services\FieldVolume;
+use froala\craftfroalawysiwyg\services\FieldService;
 
 /**
  * Class Plugin
@@ -39,7 +39,7 @@ class Plugin extends \craft\base\Plugin
         parent::init();
 
         $this->setComponents([
-            'fieldVolume' => FieldVolume::class,
+            'fieldService' => FieldService::class,
         ]);
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function (RegisterComponentTypesEvent $e) {
