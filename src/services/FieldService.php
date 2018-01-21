@@ -7,6 +7,7 @@ use craft\errors\InvalidSubpathException;
 use craft\errors\InvalidVolumeException;
 use craft\helpers\Html;
 use craft\helpers\HtmlPurifier;
+use craft\models\FolderCriteria;
 use craft\models\VolumeFolder;
 
 /**
@@ -180,10 +181,11 @@ class FieldService extends Component
                 $subPath = HtmlPurifier::cleanUtf8($renderedSubPath);
             }
 
-            $folder = \Craft::$app->getAssets()->findFolder([
-                'parentId' => $rootFolder->id,
-                'name'     => $subPath,
-            ]);
+            $criteria = new FolderCriteria();
+            $criteria->parentId = $rootFolder->id;
+            $criteria->name = $subPath;
+
+            $folder = \Craft::$app->getAssets()->findFolder($criteria);
 
             // Ensure that the folder exists
             if (!$folder) {
@@ -196,10 +198,12 @@ class FieldService extends Component
                 $segments = explode('/', $subPath);
 
                 foreach ($segments as $segment) {
-                    $folder = \Craft::$app->getAssets()->findFolder([
-                        'parentId' => $parentFolder->id,
-                        'name'     => $segment,
-                    ]);
+
+                    $criteria = new FolderCriteria();
+                    $criteria->parentId = $parentFolder->id;
+                    $criteria->name = $segment;
+
+                    $folder = \Craft::$app->getAssets()->findFolder($criteria);
 
                     // Create it if it doesn't exist
                     if (!$folder) {
@@ -228,7 +232,7 @@ class FieldService extends Component
         $newFolder = new VolumeFolder([
             'name'     => $folderName,
             'parentId' => $currentFolder->id,
-            'volumeId' => $currentFolder->volumeId,
+            'volumeId' => $this->volume->id,
             'path'     => $folderPath,
         ]);
 
