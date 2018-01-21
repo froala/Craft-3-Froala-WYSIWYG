@@ -20,6 +20,11 @@ class FieldService extends Component
     protected $element;
 
     /**
+     * @var \craft\base\VolumeInterface
+     */
+    private $volume;
+
+    /**
      * @param \craft\elements\Entry|\craft\elements\User $element
      */
     public function setElement($element)
@@ -65,6 +70,7 @@ class FieldService extends Component
                 $volumeId = (integer) ltrim($volumeId, 'folder:');
             }
 
+            $this->volume = \Craft::$app->getVolumes()->getVolumeById($volumeId);
             $folder = $this->resolveSourcePathToFolderId($volumeId, $subPath, $createDynamicFolders);
 
         } catch (InvalidSubpathException $e) {
@@ -218,14 +224,17 @@ class FieldService extends Component
      */
     private function _createSubFolder(VolumeFolder $currentFolder, $folderName)
     {
+        $folderPath = $currentFolder->path . $folderName . '/';
         $newFolder = new VolumeFolder([
             'name'     => $folderName,
             'parentId' => $currentFolder->id,
             'volumeId' => $currentFolder->volumeId,
-            'path'     => $currentFolder->path . $folderName . '/',
+            'path'     => $folderPath,
         ]);
 
-        \Craft::$app->getAssets()->createFolder($newFolder);
+        if (!$this->volume->folderExists($folderPath)) {
+            \Craft::$app->getAssets()->createFolder($newFolder);
+        }
 
         return $newFolder;
     }
