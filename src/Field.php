@@ -10,10 +10,9 @@ use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\helpers\Template;
-
-use froala\craftfroalawysiwyg\assets\froala\FroalaAsset;
 use yii\db\Schema;
 
+use froala\craftfroalawysiwyg\assets\froala\FroalaAsset;
 use froala\craftfroalawysiwyg\assets\field\FieldAsset;
 
 /**
@@ -98,7 +97,7 @@ class Field extends \craft\base\Field
     {
         parent::init();
 
-        $this->pluginSettings = \froala\craftfroalawysiwyg\Plugin::getInstance()->getSettings();
+        $this->pluginSettings = Plugin::getInstance()->getSettings();
     }
 
     /**
@@ -143,6 +142,8 @@ class Field extends \craft\base\Field
         $nsId = $view->namespaceInputId($id);
         $encValue = htmlentities((string) $value, ENT_NOQUOTES, 'UTF-8');
 
+        Plugin::getInstance()->fieldVolume->setElement($element);
+
         // start input editor settings
         $site = ($element ? $element->getSite() : Craft::$app->getSites()->currentSite);
         $settings = [
@@ -154,6 +155,16 @@ class Field extends \craft\base\Field
                 'craftLinkElementRefHandle'  => Entry::refHandle(),
                 'craftAssetElementType'      => Asset::class,
                 'craftAssetElementRefHandle' => Asset::refHandle(),
+            ],
+            'sources'        => [
+                'images' => Plugin::getInstance()->fieldVolume->determineFolderId(
+                    $this->assetsImagesSource,
+                    $this->assetsImagesSubPath
+                ),
+                'files'  => Plugin::getInstance()->fieldVolume->determineFolderId(
+                    $this->assetsFilesSource,
+                    $this->assetsFilesSubPath
+                ),
             ],
             'pluginSettings' => $this->pluginSettings->toArray(),
             'fieldSettings'  => $this->getSettings(),
