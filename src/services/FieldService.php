@@ -236,9 +236,7 @@ class FieldService extends Component
             'path'     => $folderPath,
         ]);
 
-        if (!$this->volume->folderExists($folderPath)) {
-            \Craft::$app->getAssets()->createFolder($newFolder);
-        }
+        \Craft::$app->getAssets()->createFolder($newFolder);
 
         return $newFolder;
     }
