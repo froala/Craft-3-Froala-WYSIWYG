@@ -49,8 +49,9 @@
 
     $.FE.PLUGINS.craft = function (editor) {
 
-        function showLinkInsertModal() {
-            var selectedText = (editor.selection.text() || false);
+        function showEntrySelectModal() {
+            var $popup = editor.popups.get('link.insert'),
+                selectedText = (editor.selection.text() || false);
 
             // save selection before modal is shown
             editor.selection.save();
@@ -61,64 +62,23 @@
                 editor.opts.craftLinkSources,
                 editor.opts.craftLinkCriteria,
                 [],
-                function (elements) {
+                function(elements) {
+                    // re-focus the popup
+                    if (!editor.popups.isVisible('link.insert')) {
+                        editor.popups.show('link.insert');
+                    }
+
+                    // add-in element link details
                     if (elements.length) {
                         var element = elements[0],
                             url = element.url + '#' + editor.opts.craftLinkElementRefHandle + ':' + element.id,
                             title = selectedText.length > 0 ? selectedText : element.label;
 
-                        editor.link.insert(url, title);
-
-                        return true;
+                        $popup.find('input[name="href"]').val(url);
+                        $popup.find('input[name="text"]').val(title);
                     }
-                }
-            );
-        }
 
-        function showLinkEditModal() {
-            var linkIsEntry = true,
-                disabledElementIds = [],
-                $currentLink = $(editor.link.get());
-
-            if ($currentLink.attr('href').indexOf('#') !== -1) {
-
-                // otherwise check the src url containing '#asset:{id}[:{transform}]'
-                var hashValue = $currentLink.attr('href').substr(($currentLink.attr('href').indexOf('#') + 1));
-                hashValue = decodeURIComponent(hashValue);
-
-                if (hashValue.indexOf(':') !== -1) {
-                    disabledElementIds.push(hashValue.split(':')[1]);
-
-                    var linkKind = hashValue.split(':')[0];
-                    switch (linkKind) {
-                        case 'asset':
-                            linkIsEntry = false;
-                            break;
-                    }
-                }
-            }
-
-            var modalElementType = (linkIsEntry ? editor.opts.craftLinkElementType : editor.opts.craftAssetElementType),
-                modalSources = (linkIsEntry ? editor.opts.craftLinkSources : editor.opts.craftFileSources),
-                modalCriteria = (linkIsEntry ? editor.opts.craftLinkCriteria : editor.opts.craftFileCriteria),
-                modalStorageKey = (linkIsEntry ? editor.opts.craftLinkStorageKey : editor.opts.craftFileStorageKey),
-                modalRefHandle = (linkIsEntry ? editor.opts.craftLinkElementRefHandle : editor.opts.craftAssetElementRefHandle);
-
-            _elementModal(
-                modalElementType,
-                modalStorageKey,
-                modalSources,
-                modalCriteria,
-                disabledElementIds,
-                function (elements) {
-                    if (elements.length) {
-                        var element = elements[0],
-                            url = element.url + '#' + modalRefHandle + ':' + element.id;
-
-                        $currentLink.attr('href', url);
-
-                        return true;
-                    }
+                    editor.accessibility.focusPopup($popup);
                 }
             );
         }
@@ -234,39 +194,35 @@
         }
 
         return {
-            showLinkInsertModal: showLinkInsertModal,
-            showLinkEditModal: showLinkEditModal,
+            showEntrySelectModal: showEntrySelectModal,
             showImageInsertModal: showImageInsertModal,
             showImageReplaceModal: showImageReplaceModal,
             showFileInsertModal: showFileInsertModal
         }
     };
 
-
     /*
-        REPLACE LINK COMMAND
+        LINK REPLACEMENTS & ADDITIONS
      */
 
-    $.FE.RegisterCommand('insertLink', $.extend($.FE.COMMANDS['insertLink'], {
-        callback: function() {
-            this.craft.showLinkInsertModal();
+    $.FE.DefineIcon('craftLinkEntry', { NAME: 'newspaper-o' });
+    $.FE.RegisterCommand('craftLinkEntry', {
+        title: 'Link to Craft Entry',
+        undo: false,
+        focus: true,
+        refreshOnCallback: false,
+        popup: true,
+        callback: function () {
+            this.craft.showEntrySelectModal();
         }
-    }));
+    });
 
-    $.FE.RegisterCommand('imageLink', $.extend($.FE.COMMANDS['imageLink'], {
-        callback: function(cmd, val) {
-            this.craft.showLinkInsertModal();
-        }
-    }));
-
-    $.FE.RegisterCommand('linkEdit', $.extend($.FE.COMMANDS['linkEdit'], {
-        callback: function (cmd, val) {
-            this.craft.showLinkEditModal();
-        }
-    }));
+    $.extend($.FE.DEFAULTS, {
+        linkInsertButtons: ['craftLinkEntry']
+    });
 
     /*
-        REPLACE IMAGE COMMANDS
+        IMAGE REPLACEMENTS & ADDITIONS
      */
 
     $.FE.RegisterCommand('insertImage', $.extend($.FE.COMMANDS['insertImage'], {
@@ -282,7 +238,7 @@
     }));
 
     /*
-        REPLACE FILE COMMANDS
+        FILE REPLACEMENTS & ADDITIONS
      */
 
     $.FE.RegisterCommand('insertFile', $.extend($.FE.COMMANDS['insertFile'], {
