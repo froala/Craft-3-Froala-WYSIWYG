@@ -15,6 +15,16 @@ class Settings extends Model
     public $licenseKey;
 
     /**
+     * @var boolean
+     */
+    public $cleanupHtml = true;
+
+    /**
+     * @var boolean
+     */
+    public $purifyHtml = true;
+
+    /**
      * @var string
      */
     public $customCssType;

@@ -17,4 +17,22 @@
             <a href="https://www.froala.com/wysiwyg-editor/pricing" target="_blank">Froala website</a>.
         </div>
     {% endif %}
+
+    <hr>
+
+    {{ forms.lightswitchField({
+        id: 'settings-cleanupHtml',
+        name: 'settings[cleanupHtml]',
+        label: 'Clean up HTML?'|t('froala-editor'),
+        instructions: 'Removes <code>&lt;span&gt;</code>’s, empty tags, and most <code>style</code> attributes on save.'|t('froala-editor'),
+        on: settings.cleanupHtml
+    }) }}
+
+    {{ forms.lightswitchField({
+        id: 'settings-purifyHtml',
+        name: 'settings[purifyHtml]',
+        label: 'Purify HTML?'|t('froala-editor'),
+        instructions: 'Removes any potentially-malicious code on save, by running the submitted data through <a href="http://htmlpurifier.org/" target="_blank">HTML Purifier</a>.'|t('froala-editor'),
+        on: settings.purifyHtml
+    }) }}
 {% endblock %}
