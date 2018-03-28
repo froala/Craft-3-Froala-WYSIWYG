@@ -90,7 +90,6 @@ class Field extends \craft\base\Field
         $view = Craft::$app->getView();
         $id = $view->formatInputId($this->handle);
         $nsId = $view->namespaceInputId($id);
-        $encValue = htmlentities((string)$value, ENT_NOQUOTES, 'UTF-8');
 
         Plugin::getInstance()->fieldService->setElement($element);
 
@@ -127,10 +126,19 @@ class Field extends \craft\base\Field
         $view->registerAssetBundle(FieldAsset::class);
         $view->registerJs('new Craft.FroalaEditorInput(' . Json::encode($settings) . ');');
 
+        if ($value instanceof FieldData) {
+            $value = $value->getRawContent();
+        }
+
+        if ($value !== null) {
+            // Parse reference tags
+            $value = $this->_parseRefs($value, $element);
+        }
+
         return Craft::$app->getView()->renderTemplate('froala-editor/field/input', [
             'id'     => $id,
             'handle' => $this->handle,
-            'value'  => $encValue,
+            'value'  => htmlentities((string)$value, ENT_NOQUOTES, 'UTF-8'),
         ]);
     }
 
@@ -257,14 +265,13 @@ class Field extends \craft\base\Field
      */
     private function getPurifierConfig(): array
     {
-        if ($config = $this->getConfig('htmlpurifier', $this->purifierConfig)) {
+        if ($config = $this->getConfig('htmlpurifier', $this->pluginSettings->purifierConfig)) {
             return $config;
         }
 
         // Default config
         return [
             'Attr.AllowedFrameTargets' => ['_blank'],
-            'HTML.AllowedComments'     => ['pagebreak'],
         ];
     }
 
