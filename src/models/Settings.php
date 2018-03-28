@@ -25,6 +25,11 @@ class Settings extends Model
     public $purifyHtml = true;
 
     /**
+     * @var array
+     */
+    public $purifierConfig = 'default';
+
+    /**
      * @var string
      */
     public $customCssType;
