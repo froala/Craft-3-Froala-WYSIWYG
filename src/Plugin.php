@@ -6,7 +6,9 @@ use Craft;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
+use froala\craftfroalawysiwyg\variables\FroalaVariable;
 use yii\base\Event;
 
 use froala\craftfroalawysiwyg\services\FieldService;
@@ -49,6 +51,10 @@ class Plugin extends \craft\base\Plugin
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules['froala-editor/settings'] = 'froala-editor/settings/show';
             $event->rules['froala-editor/settings/<settingsType:{handle}>'] = 'froala-editor/settings/show';
+        });
+
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function (Event $event) {
+            $event->sender->set('froala', FroalaVariable::class);
         });
     }
 
