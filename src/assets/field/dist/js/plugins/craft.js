@@ -50,11 +50,13 @@
     $.FE.PLUGINS.craft = function (editor) {
 
         function showEntrySelectModal() {
-            var $popup = editor.popups.get('link.insert'),
-                selectedText = (editor.selection.text() || false);
+            var $popup = editor.popups.get('link.insert');
 
             // save selection before modal is shown
-            editor.selection.save();
+            var $current_image = editor.image.get();
+            if (!$current_image) {
+                editor.selection.save();
+            }
 
             _elementModal(
                 editor.opts.craftLinkElementType,
@@ -63,6 +65,14 @@
                 editor.opts.craftLinkCriteria,
                 [],
                 function(elements) {
+                    var selectedText = false;
+                    if ($current_image) {
+                        editor.image.edit($current_image);
+                    } else {
+                        editor.selection.restore();
+                        selectedText = editor.selection.text();
+                    }
+
                     // re-focus the popup
                     if (!editor.popups.isVisible('link.insert')) {
                         editor.popups.show('link.insert');
@@ -77,8 +87,6 @@
                         $popup.find('input[name="href"]').val(url);
                         $popup.find('input[name="text"]').val(title);
                     }
-
-                    editor.accessibility.focusPopup($popup);
                 }
             );
         }
@@ -103,7 +111,7 @@
                                 url += ':' + transform;
                             }
 
-                            editor.image.insert(url, false, { 'asset-id': asset.id });
+                            editor.image.insert(url, false);
                         }
 
                         return true;
@@ -146,7 +154,7 @@
                                 url += ':' + transform;
                             }
 
-                            editor.image.insert(url, false, { 'asset-id': asset.id }, $currentImage);
+                            editor.image.insert(url, false, [], $currentImage);
                         }
 
                         return true;
