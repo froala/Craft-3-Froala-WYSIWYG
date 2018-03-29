@@ -50,12 +50,26 @@
     $.FE.PLUGINS.craft = function (editor) {
 
         function showEntrySelectModal() {
-            var $popup = editor.popups.get('link.insert');
+            var disabledElementIds = [],
+                $popup = editor.popups.get('link.insert'),
+                selectedText = (editor.selection.text() || false);
 
             // save selection before modal is shown
-            var $current_image = editor.image.get();
-            if (!$current_image) {
+            var $currentImage = editor.image.get();
+            if (!$currentImage) {
                 editor.selection.save();
+            }
+
+            // check the src url containing '#asset:{id}[:{transform}]'
+            var urlValue = $popup.find('input[name="href"]').val();
+            if (urlValue && urlValue.indexOf('#') !== -1) {
+
+                var hashValue = urlValue.substr(urlValue.indexOf('#'));
+                    hashValue = decodeURIComponent(hashValue);
+
+                if (hashValue.indexOf(':') !== -1) {
+                    disabledElementIds.push(hashValue.split(':')[1]);
+                }
             }
 
             _elementModal(
@@ -63,14 +77,12 @@
                 editor.opts.craftLinkStorageKey,
                 editor.opts.craftLinkSources,
                 editor.opts.craftLinkCriteria,
-                [],
+                disabledElementIds,
                 function(elements) {
-                    var selectedText = false;
-                    if ($current_image) {
-                        editor.image.edit($current_image);
+                    if ($currentImage) {
+                        editor.image.edit($currentImage);
                     } else {
                         editor.selection.restore();
-                        selectedText = editor.selection.text();
                     }
 
                     // re-focus the popup
@@ -124,14 +136,11 @@
             var disabledElementIds = [],
                 $currentImage = editor.image.get();
 
-            // find out the current asset id based on data-attribute
-            if ($currentImage.data('assetId')) {
-                disabledElementIds.push($currentImage.data('assetId'));
-            } else if ($currentImage.attr('src').indexOf('#') !== -1) {
+            // check the src url containing '#asset:{id}[:{transform}]'
+            if ($currentImage.attr('src').indexOf('#') !== -1) {
 
-                // otherwise check the src url containing '#asset:{id}[:{transform}]'
                 var hashValue = $currentImage.attr('src').substr($currentImage.attr('src').indexOf('#'));
-                hashValue = decodeURIComponent(hashValue);
+                    hashValue = decodeURIComponent(hashValue);
 
                 if (hashValue.indexOf(':') !== -1) {
                     disabledElementIds.push(hashValue.split(':')[1]);
