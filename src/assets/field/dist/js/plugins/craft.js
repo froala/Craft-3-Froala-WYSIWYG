@@ -77,7 +77,9 @@
                 editor.opts.craftLinkStorageKey,
                 editor.opts.craftLinkSources,
                 editor.opts.craftLinkCriteria,
-                disabledElementIds,
+                {
+                    transforms: editor.opts.craftImageTransforms
+                },
                 function(elements) {
                     if ($currentImage) {
                         editor.image.edit($currentImage);
@@ -112,7 +114,7 @@
                 editor.opts.craftImageStorageKey,
                 editor.opts.craftImageSources,
                 editor.opts.craftImageCriteria,
-                [],
+                null,
                 function(assets, transform) {
                     if (assets.length) {
                         for (var i = 0; i < assets.length; i++) {
@@ -152,7 +154,10 @@
                 editor.opts.craftImageStorageKey,
                 editor.opts.craftImageSources,
                 editor.opts.craftImageCriteria,
-                disabledElementIds,
+                {
+                    disabledElementIds: disabledElementIds,
+                    transforms: editor.opts.craftImageTransforms
+                },
                 function(assets, transform) {
                     if (assets.length) {
                         for (var i = 0; i < assets.length; i++) {
@@ -183,7 +188,7 @@
                 editor.opts.craftFileStorageKey,
                 editor.opts.craftFileSources,
                 editor.opts.craftFileCriteria,
-                [],
+                null,
                 function(elements) {
                     if (elements.length) {
                         var element = elements[0],
@@ -198,16 +203,21 @@
             );
         }
 
-        function _elementModal(type, storageKey, sources, criteria, disabled, callback) {
+        function _elementModal(type, storageKey, sources, criteria, addOpts, callback) {
 
-            var modal = Craft.createElementSelectorModal(type, {
+            var modalOpts = {
                 storageKey: (storageKey || 'Froala.Craft.Modal.' + type),
                 sources: sources,
-                criteria: $.extend({ siteId: editor.opts.craftElementSiteId }, criteria),
-                disabledElementIds: disabled,
+                criteria: criteria,
                 onSelect: $.proxy(callback, editor),
                 closeOtherModals: false
-            });
+            };
+
+            if (typeof addOpts !== 'undefined') {
+                modalOpts = $.extend(modalOpts, addOpts);
+            }
+
+            var modal = Craft.createElementSelectorModal(type, modalOpts);
         }
 
         return {
