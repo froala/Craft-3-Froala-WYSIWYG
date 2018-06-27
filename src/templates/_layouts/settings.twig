@@ -2,10 +2,37 @@
 
 {% set fullPageForm = true %}
 
+{% set selectedSubnavItem = 'general' %}
+
+{% set title = craft.froala.name | t('froala-editor') %}
+
+{% set navItems = {
+    'general': { title: 'General' | t('froala-editor') },
+    'plugins': { title: 'Plugins' | t('froala-editor') },
+    'customcss': { title: 'Custom CSS' | t('froala-editor') }
+} %}
+
+{% set selectedItem = craft.app.request.getSegment(3)|default %}
+{% set docTitle = navItems[selectedItem].title %}
+
 {% set crumbs = [
-    { label: "Settings"|t('app'), url: url('settings') },
-    { label: "Plugins"|t('app'), url: url('settings/plugins') }
+    { label: title | t('froala-editor'), url: url('froala-editor/settings/general') },
+    { label: docTitle | t('froala-editor'), url: url('froala-editor/settings/' ~ selectedItem) }
 ] %}
+
+{% block sidebar %}
+    <nav>
+        <ul>
+            {% for id, item in navItems %}
+                {% if item.heading is defined %}
+                    <li class="heading"><span>{{ item.heading }}</span></li>
+                {% else %}
+                    <li><a href="{{ url('froala-editor/settings/'~id) }}"{% if id == selectedItem %} class="sel"{% endif %}>{{ item.title }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}
 
 {% block content %}
     <input type="hidden" name="action" value="plugins/save-plugin-settings">

@@ -50,19 +50,43 @@
     $.FE.PLUGINS.craft = function (editor) {
 
         function showEntrySelectModal() {
-            var $popup = editor.popups.get('link.insert'),
+            var disabledElementIds = [],
+                $popup = editor.popups.get('link.insert'),
                 selectedText = (editor.selection.text() || false);
 
             // save selection before modal is shown
-            editor.selection.save();
+            var $currentImage = editor.image.get();
+            if (!$currentImage) {
+                editor.selection.save();
+            }
+
+            // check the src url containing '#asset:{id}[:{transform}]'
+            var urlValue = $popup.find('input[name="href"]').val();
+            if (urlValue && urlValue.indexOf('#') !== -1) {
+
+                var hashValue = urlValue.substr(urlValue.indexOf('#'));
+                    hashValue = decodeURIComponent(hashValue);
+
+                if (hashValue.indexOf(':') !== -1) {
+                    disabledElementIds.push(hashValue.split(':')[1]);
+                }
+            }
 
             _elementModal(
                 editor.opts.craftLinkElementType,
                 editor.opts.craftLinkStorageKey,
                 editor.opts.craftLinkSources,
                 editor.opts.craftLinkCriteria,
-                [],
+                {
+                    transforms: editor.opts.craftImageTransforms
+                },
                 function(elements) {
+                    if ($currentImage) {
+                        editor.image.edit($currentImage);
+                    } else {
+                        editor.selection.restore();
+                    }
+
                     // re-focus the popup
                     if (!editor.popups.isVisible('link.insert')) {
                         editor.popups.show('link.insert');
@@ -77,8 +101,6 @@
                         $popup.find('input[name="href"]').val(url);
                         $popup.find('input[name="text"]').val(title);
                     }
-
-                    editor.accessibility.focusPopup($popup);
                 }
             );
         }
@@ -92,7 +114,7 @@
                 editor.opts.craftImageStorageKey,
                 editor.opts.craftImageSources,
                 editor.opts.craftImageCriteria,
-                [],
+                null,
                 function(assets, transform) {
                     if (assets.length) {
                         for (var i = 0; i < assets.length; i++) {
@@ -103,7 +125,7 @@
                                 url += ':' + transform;
                             }
 
-                            editor.image.insert(url, false, { 'asset-id': asset.id });
+                            editor.image.insert(url, false);
                         }
 
                         return true;
@@ -116,14 +138,11 @@
             var disabledElementIds = [],
                 $currentImage = editor.image.get();
 
-            // find out the current asset id based on data-attribute
-            if ($currentImage.data('assetId')) {
-                disabledElementIds.push($currentImage.data('assetId'));
-            } else if ($currentImage.attr('src').indexOf('#') !== -1) {
+            // check the src url containing '#asset:{id}[:{transform}]'
+            if ($currentImage.attr('src').indexOf('#') !== -1) {
 
-                // otherwise check the src url containing '#asset:{id}[:{transform}]'
                 var hashValue = $currentImage.attr('src').substr($currentImage.attr('src').indexOf('#'));
-                hashValue = decodeURIComponent(hashValue);
+                    hashValue = decodeURIComponent(hashValue);
 
                 if (hashValue.indexOf(':') !== -1) {
                     disabledElementIds.push(hashValue.split(':')[1]);
@@ -135,7 +154,10 @@
                 editor.opts.craftImageStorageKey,
                 editor.opts.craftImageSources,
                 editor.opts.craftImageCriteria,
-                disabledElementIds,
+                {
+                    disabledElementIds: disabledElementIds,
+                    transforms: editor.opts.craftImageTransforms
+                },
                 function(assets, transform) {
                     if (assets.length) {
                         for (var i = 0; i < assets.length; i++) {
@@ -146,7 +168,7 @@
                                 url += ':' + transform;
                             }
 
-                            editor.image.insert(url, false, { 'asset-id': asset.id }, $currentImage);
+                            editor.image.insert(url, false, [], $currentImage);
                         }
 
                         return true;
@@ -166,7 +188,7 @@
                 editor.opts.craftFileStorageKey,
                 editor.opts.craftFileSources,
                 editor.opts.craftFileCriteria,
-                [],
+                null,
                 function(elements) {
                     if (elements.length) {
                         var element = elements[0],
@@ -181,16 +203,21 @@
             );
         }
 
-        function _elementModal(type, storageKey, sources, criteria, disabled, callback) {
+        function _elementModal(type, storageKey, sources, criteria, addOpts, callback) {
 
-            var modal = Craft.createElementSelectorModal(type, {
+            var modalOpts = {
                 storageKey: (storageKey || 'Froala.Craft.Modal.' + type),
                 sources: sources,
-                criteria: $.extend({ siteId: editor.opts.craftElementSiteId }, criteria),
-                disabledElementIds: disabled,
+                criteria: criteria,
                 onSelect: $.proxy(callback, editor),
                 closeOtherModals: false
-            });
+            };
+
+            if (typeof addOpts !== 'undefined') {
+                modalOpts = $.extend(modalOpts, addOpts);
+            }
+
+            var modal = Craft.createElementSelectorModal(type, modalOpts);
         }
 
         return {

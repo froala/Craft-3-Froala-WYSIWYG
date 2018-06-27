@@ -5,13 +5,14 @@
 {% block fields %}
     {{ forms.field({
         label: 'CSS File'|t('froala-editor'),
-        instructions: 'Include a custom style file for the editor to display content in your style. This file path could be inside a Volume or a Plugin resource or should be a relative to your site\'s document root path.'|t('froala-editor')
+        instructions: 'Include a custom style file for the editor to display content in your style. This file path could be inside a Volume or a Plugin resource or should be relative to your site\'s document root path.'|t('froala-editor'),
+        first: true
     }, macros.customCssInput('customCss', settings)) }}
 
     {{ forms.editableTableField({
         id: 'customCssClasses',
         name: 'settings[customCssClasses]',
-        label: 'Extra CSS Classes'|t('froala-editor'),
+        label: 'Paragraph CSS Classes'|t('froala-editor'),
         instructions: 'Add extra Paragraph Style classes.'|t('froala-editor'),
         rows: settings.customCssClasses,
         cols: {

@@ -9,7 +9,7 @@ use craft\elements\Entry;
 use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
-use craft\helpers\Template;
+use craft\validators\HandleValidator;
 use yii\db\Schema;
 
 use froala\craftfroalawysiwyg\assets\froala\FroalaAsset;
@@ -20,31 +20,6 @@ use froala\craftfroalawysiwyg\assets\field\FieldAsset;
  */
 class Field extends \craft\base\Field
 {
-    /**
-     * @var \craft\base\Model
-     */
-    private $pluginSettings;
-
-    /**
-     * @var string|null The HTML Purifier config file to use
-     */
-    public $purifierConfig;
-
-    /**
-     * @var bool Whether the HTML should be cleaned up on save
-     */
-    public $cleanupHtml = true;
-
-    /**
-     * @var bool Whether the HTML should be purified on save
-     */
-    public $purifyHtml = true;
-
-    /**
-     * @var string The type of database column the field should have in the content table
-     */
-    public $columnType = Schema::TYPE_TEXT;
-
     /**
      * @var string The image source to use with current field
      */
@@ -66,29 +41,9 @@ class Field extends \craft\base\Field
     public $assetsFilesSubPath = '';
 
     /**
-     * @var string The custom source of injecting a CSS file
+     * @var \craft\base\Model
      */
-    public $customCssType;
-
-    /**
-     * @var string The custom CSS file path within selected CSS type (source)
-     */
-    public $customCssFile;
-
-    /**
-     * @var array A list with custom CSS classes inside the editor
-     */
-    public $customCssClasses = [];
-
-    /**
-     * @var bool Whether or not to override the plugin CSS classes inside the editor
-     */
-    public $customCssClassesOverride = false;
-
-    /**
-     * @var string|array
-     */
-    public $enabledPlugins = '*';
+    private $pluginSettings;
 
     /**
      * {@inheritdoc}
@@ -113,14 +68,9 @@ class Field extends \craft\base\Field
      */
     public function getSettingsHtml()
     {
-        /**
-         * @var FroalaAsset $froalaAsset
-         */
-        $froalaAsset = Craft::$app->getView()->getAssetManager()->getBundle(FroalaAsset::class);
-
         return Craft::$app->getView()->renderTemplate('froala-editor/field/settings', [
             'field'   => $this,
-            'plugins' => $froalaAsset->getPlugins($this->pluginSettings->enabledPlugins),
+            'plugins' => $this->pluginSettings->enabledPlugins,
         ]);
     }
 
@@ -129,7 +79,7 @@ class Field extends \craft\base\Field
      */
     public function getContentColumnType(): string
     {
-        return $this->columnType;
+        return Schema::TYPE_TEXT;
     }
 
     /**
@@ -140,7 +90,6 @@ class Field extends \craft\base\Field
         $view = Craft::$app->getView();
         $id = $view->formatInputId($this->handle);
         $nsId = $view->namespaceInputId($id);
-        $encValue = htmlentities((string) $value, ENT_NOQUOTES, 'UTF-8');
 
         Plugin::getInstance()->fieldService->setElement($element);
 
@@ -177,10 +126,19 @@ class Field extends \craft\base\Field
         $view->registerAssetBundle(FieldAsset::class);
         $view->registerJs('new Craft.FroalaEditorInput(' . Json::encode($settings) . ');');
 
+        if ($value instanceof FieldData) {
+            $value = $value->getRawContent();
+        }
+
+        if ($value !== null) {
+            // Parse reference tags
+            $value = $this->_parseRefs($value, $element);
+        }
+
         return Craft::$app->getView()->renderTemplate('froala-editor/field/input', [
             'id'     => $id,
             'handle' => $this->handle,
-            'value'  => $encValue,
+            'value'  => htmlentities((string)$value, ENT_NOQUOTES, 'UTF-8'),
         ]);
     }
 
@@ -194,7 +152,7 @@ class Field extends \craft\base\Field
         }
 
         // Prevent everyone from having to use the |raw filter when outputting RTE content
-        return Template::raw($value);
+        return new FieldData($value);
     }
 
     /**
@@ -208,14 +166,50 @@ class Field extends \craft\base\Field
         }
 
         // Get the raw value
-        $value = (string) $value;
+        $value = (string)$value;
         if (!$value) {
             return null;
         }
 
-        if ($this->purifyHtml) {
+        if ($this->pluginSettings->purifyHtml) {
+            // Parse reference tags so HTMLPurifier doesn't encode the curly braces
+            $value = $this->_parseRefs($value, $element);
+
             $value = HtmlPurifier::process($value, $this->getPurifierConfig());
         }
+
+        if ($this->pluginSettings->cleanupHtml) {
+
+            // Remove <span> and <font> tags
+            $value = preg_replace('/<(?:span|font)\b[^>]*>/', '', $value);
+            $value = preg_replace('/<\/(?:span|font)>/', '', $value);
+
+            // Remove inline styles
+            $value = preg_replace('/(<(?:h1|h2|h3|h4|h5|h6|p|div|blockquote|pre|strong|em|b|i|u|a)\b[^>]*)\s+style="[^"]*"/', '$1', $value);
+
+            // Remove empty tags
+            $value = preg_replace('/<(h1|h2|h3|h4|h5|h6|p|div|blockquote|pre|strong|em|a|b|i|u)\s*><\/\1>/', '', $value);
+        }
+
+        // Find any element URLs and swap them with ref tags
+        $pattern = '/(href=|src=)([\'"])[^\'"#]+?(#[^\'"#]+)?(?:#|%23)([\w\\\\]+)\:(\d+)(\:(?:transform\:)?' . HandleValidator::$handlePattern . ')?\2/';
+        $value = preg_replace_callback($pattern, function ($matches) {
+            // Create the ref tag, and make sure :url is in there
+            $refTag = '{' . $matches[4] . ':' . $matches[5] . (!empty($matches[6]) ? $matches[6] : ':url') . '}';
+            $hash = (!empty($matches[3]) ? $matches[3] : '');
+            if ($hash) {
+                // Make sure that the hash isn't actually part of the parsed URL
+                // (someone's Entry URL Format could be "#{slug}", etc.)
+                $url = Craft::$app->getElements()->parseRefs($refTag);
+                if (mb_strpos($url, $hash) !== false) {
+                    $hash = '';
+                }
+            }
+
+            return $matches[1] . $matches[2] . $refTag . $hash . $matches[2];
+        },
+            $value
+        );
 
         if (Craft::$app->getDb()->getIsMysql()) {
             // Encode any 4-byte UTF-8 characters.
@@ -228,10 +222,39 @@ class Field extends \craft\base\Field
     /**
      * @inheritdoc
      */
-    public function isEmpty($value): bool
+    public function isValueEmpty($value, ElementInterface $element): bool
     {
-        /** @var \Twig_Markup|null $value */
-        return $value === null || parent::isEmpty((string) $value);
+        if ($value === null) {
+            return true;
+        }
+
+        /** @var FieldData $value */
+        return parent::isValueEmpty($value->getRawContent(), $element);
+    }
+
+    /**
+     * Parse ref tags in URLs, while preserving the original tag values in the URL fragments
+     * (e.g. `href="{entry:id:url}"` => `href="[entry-url]#entry:id:url"`)
+     *
+     * @param string                $value
+     * @param ElementInterface|null $element
+     * @return string
+     */
+    private function _parseRefs(string $value, ElementInterface $element = null): string
+    {
+        if (!StringHelper::contains($value, '{')) {
+            return $value;
+        }
+
+        $pattern = '/(href=|src=)([\'"])(\{([\w\\\\]+\:\d+\:(?:transform\:)?' . HandleValidator::$handlePattern . ')\})(#[^\'"#]+)?\2/';
+
+        return preg_replace_callback($pattern, function ($matches) use ($element) {
+            /** @var \craft\base\Element|null $element */
+            list (, $attr, $q, $refTag, $ref) = $matches;
+            $fragment = $matches[5] ?? '';
+
+            return $attr . $q . Craft::$app->getElements()->parseRefs($refTag, $element->siteId ?? null) . $fragment . '#' . $ref . $q;
+        }, $value);
     }
 
     /**
@@ -242,21 +265,20 @@ class Field extends \craft\base\Field
      */
     private function getPurifierConfig(): array
     {
-        if ($config = $this->getConfig('htmlpurifier', $this->purifierConfig)) {
+        if ($config = $this->getConfig('htmlpurifier', $this->pluginSettings->purifierConfig)) {
             return $config;
         }
 
         // Default config
         return [
             'Attr.AllowedFrameTargets' => ['_blank'],
-            'HTML.AllowedComments'     => ['pagebreak'],
         ];
     }
 
     /**
      * Returns a JSON-decoded config, if it exists.
      *
-     * @param string $dir
+     * @param string      $dir
      * @param string|null $file
      *
      * @return array|bool

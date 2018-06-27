@@ -3,10 +3,13 @@
 namespace froala\craftfroalawysiwyg;
 
 use Craft;
+use craft\helpers\FileHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
+use froala\craftfroalawysiwyg\variables\FroalaVariable;
 use yii\base\Event;
 
 use froala\craftfroalawysiwyg\services\FieldService;
@@ -46,9 +49,13 @@ class Plugin extends \craft\base\Plugin
             $e->types[] = Field::class;
         });
 
-        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function (RegisterUrlRulesEvent $event) {
             $event->rules['froala-editor/settings'] = 'froala-editor/settings/show';
             $event->rules['froala-editor/settings/<settingsType:{handle}>'] = 'froala-editor/settings/show';
+        });
+
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function (Event $event) {
+            $event->sender->set('froala', FroalaVariable::class);
         });
     }
 
@@ -68,5 +75,59 @@ class Plugin extends \craft\base\Plugin
         $url = \craft\helpers\UrlHelper::cpUrl('froala-editor/settings/general');
 
         return Craft::$app->controller->redirect($url);
+    }
+
+    /**
+     * @param string $settingsKey
+     * @param string $subDir
+     *
+     * @return array
+     * @throws \yii\base\Exception
+     */
+    public function getCustomConfig($settingsKey, $subDir)
+    {
+        $file = $this->getSettings()->$settingsKey;
+        $path = \Craft::$app->getPath()->getConfigPath() . $subDir . DIRECTORY_SEPARATOR . $file;
+
+        if (!$file || !file_exists($path)) {
+
+            if ($settingsKey === 'purifierConfig') {
+                return [
+                    'Attr.AllowedFrameTargets' => ['_blank'],
+                ];
+            }
+
+            return [];
+        }
+
+        $json = file_get_contents($path);
+
+        return json_decode($json, true);
+    }
+
+    /**
+     * @param string $dir
+     *
+     * @return array
+     * @throws \yii\base\Exception
+     */
+    public function getCustomConfigOptions($dir)
+    {
+        $options = ['' => Craft::t('froala-editor', 'Default')];
+        $path = \Craft::$app->getPath()->getConfigPath() . DIRECTORY_SEPARATOR . $dir;
+
+        if (is_dir($path)) {
+
+            $files = FileHelper::findFiles($path, [
+                'only'      => ['*.json'],
+                'recursive' => false,
+            ]);
+
+            foreach ($files as $file) {
+                $options[pathinfo($file, PATHINFO_BASENAME)] = pathinfo($file, PATHINFO_FILENAME);
+            }
+        }
+
+        return $options;
     }
 }

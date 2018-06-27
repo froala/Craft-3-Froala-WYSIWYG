@@ -15,12 +15,17 @@
             this.config.key = this.pluginSettings.licenseKey;
             this.config.theme = 'craftcms';
 
+            this.setContentContainer();
             this.assembleParagraphStyles();
             this.assembleEnabledPlugins();
             this.assembleToolbarButtons();
             this.clearCorePluginsEnabled();
 
             this.afterInit();
+        },
+        setContentContainer: function () {
+
+            this.config.scrollableContainer = '#' + this.settings.id + '-field';
         },
         assembleParagraphStyles: function () {
             var list = {};
