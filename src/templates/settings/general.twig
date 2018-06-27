@@ -18,21 +18,56 @@
         </div>
     {% endif %}
 
+    {{ forms.selectField({
+        id: 'froala-editor-config',
+        label: "Custom Editor Config"|t(),
+        name: 'settings[editorConfig]',
+        options: editorConfigOptions,
+        value: settings.editorConfig,
+        instructions: "You can save custom {name} configs as {ext} files in {path}."|t({
+            name: 'Froala Editor',
+            ext: '`.json`',
+            path: '`config/froalaeditor/`'
+        }) ~
+        ' <a href="https://www.froala.com/wysiwyg-editor/docs/options" target="_blank">' ~ "View available options"|t ~ '</a>'
+    }) }}
+
     <hr>
 
-    {{ forms.lightswitchField({
-        id: 'settings-cleanupHtml',
-        name: 'settings[cleanupHtml]',
-        label: 'Clean up HTML?'|t('froala-editor'),
-        instructions: 'Removes <code>&lt;span&gt;</code>’s, empty tags, and most <code>style</code> attributes on save.'|t('froala-editor'),
-        on: settings.cleanupHtml
-    }) }}
+    <a class="fieldtoggle" data-target="advanced">{{ 'Advanced'|t }}</a>
 
-    {{ forms.lightswitchField({
-        id: 'settings-purifyHtml',
-        name: 'settings[purifyHtml]',
-        label: 'Purify HTML?'|t('froala-editor'),
-        instructions: 'Removes any potentially-malicious code on save, by running the submitted data through <a href="http://htmlpurifier.org/" target="_blank">HTML Purifier</a>.'|t('froala-editor'),
-        on: settings.purifyHtml
-    }) }}
+    <div id="advanced" class="hidden">
+        {{ forms.lightswitchField({
+            id: 'settings-cleanupHtml',
+            name: 'settings[cleanupHtml]',
+            label: 'Clean up HTML?'|t('froala-editor'),
+            instructions: 'Removes <code>&lt;span&gt;</code>’s, empty tags, and most <code>style</code> attributes on save.'|t('froala-editor'),
+            on: settings.cleanupHtml
+        }) }}
+
+        {{ forms.lightswitchField({
+            id: 'settings-purifyHtml',
+            name: 'settings[purifyHtml]',
+            label: 'Purify HTML?'|t('froala-editor'),
+            instructions: 'Removes any potentially-malicious code on save, by running the submitted data through <a href="http://htmlpurifier.org/" target="_blank">HTML Purifier</a>.'|t('froala-editor'),
+            on: settings.purifyHtml,
+            toggle: 'purifier-config-container'
+        }) }}
+
+        <div id="purifier-config-container"{% if not settings.purifyHtml %} class="hidden"{% endif %}>
+            {{ forms.selectField({
+                id: 'froala-purifier-config',
+                label: "HTML Purifier Config"|t(),
+                name: 'settings[purifierConfig]',
+                options: purifierConfigOptions,
+                value: settings.purifierConfig,
+                instructions: "You can save custom {name} configs as {ext} files in {path}."|t({
+                    name: 'HTML Purifier Config',
+                    ext: '`.json`',
+                    path: '`config/htmlpurifier/`'
+                }) ~
+                ' <a href="http://htmlpurifier.org/live/configdoc/plain.html" target="_blank">' ~ "View available settings"|t ~ '</a>'
+            }) }}
+        </div>
+    </div>
 {% endblock %}

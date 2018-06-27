@@ -65,7 +65,7 @@ class FroalaAsset extends AssetBundle
      *
      * @return array
      */
-    public function getPlugins($filter = ['*'])
+    public function getAllEditorPlugins($filter = ['*'])
     {
         if (!is_array($filter)) {
             $filter = [$filter];

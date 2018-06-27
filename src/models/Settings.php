@@ -17,7 +17,7 @@ class Settings extends Model
     /**
      * @var boolean
      */
-    public $cleanupHtml = true;
+    public $cleanupHtml = false;
 
     /**
      * @var boolean
@@ -25,9 +25,14 @@ class Settings extends Model
     public $purifyHtml = true;
 
     /**
-     * @var array
+     * @var string
      */
     public $purifierConfig = 'default';
+
+    /**
+     * @var string
+     */
+    public $editorConfig = 'default';
 
     /**
      * @var string

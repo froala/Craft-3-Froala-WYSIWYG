@@ -14,6 +14,7 @@ class SettingsController extends Controller
 {
     /**
      * @return \yii\web\Response
+     * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
     public function actionShow()
@@ -31,14 +32,30 @@ class SettingsController extends Controller
             return $this->redirect('froala-editor/settings/general');
         }
 
-        /**
-         * @var FroalaAsset $froalaAsset
-         */
-        $froalaAsset = Craft::$app->getView()->getAssetManager()->getBundle(FroalaAsset::class);
+        $plugin = Plugin::getInstance();
+        $variables = [
+            'settings' => $plugin->getSettings(),
+        ];
 
-        return $this->renderTemplate('froala-editor/settings/' . $routeParams['settingsType'], [
-            'settings'    => Plugin::getInstance()->getSettings(),
-            'plugins'     => $froalaAsset->getPlugins(),
-        ]);
+        switch ($routeParams['settingsType']) {
+            case 'general':
+                $variables['editorConfigOptions'] = $plugin->getCustomConfigOptions('froalaeditor');
+                $variables['purifierConfigOptions'] = $plugin->getCustomConfigOptions('htmlpurifier');
+                break;
+
+            case 'plugins':
+                /**
+                 * @var FroalaAsset $froalaAsset
+                 */
+                $froalaAsset = Craft::$app->getView()->getAssetManager()->getBundle(FroalaAsset::class);
+                $variables['plugins'] = $froalaAsset->getAllEditorPlugins();
+                break;
+
+            case 'customcss':
+                // nothing yet
+                break;
+        }
+
+        return $this->renderTemplate('froala-editor/settings/' . $routeParams['settingsType'], $variables);
     }
 }
