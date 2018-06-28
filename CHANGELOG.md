@@ -1,12 +1,11 @@
 ## [Unreleased]
 
 ### Fixed
-- Core Froala Editor plugins (bold/italic etc) can be disabled too
 
 ### Added
-- Support for Custom CSS in Volumes
-- Composer dependency for Froala Editor v2.7.3
-- Intial source version for Craft 3 CMS
 
 ### Changed
-- The way to setup custom CSS classes (via editable table field)
+
+## v2.8.1-rc.1 - 2018-06-28
+
+- Initial release of the Craft CMS 3 plugin for Froala WYSIWYG
