@@ -1,10 +1,4 @@
-## [Unreleased]
-
-### Fixed
-
-### Added
-
-### Changed
+# Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
 ## v2.8.1-rc.1 - 2018-06-28
 
