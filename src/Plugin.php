@@ -78,16 +78,26 @@ class Plugin extends \craft\base\Plugin
     }
 
     /**
-     * @param string $settingsKey
-     * @param string $subDir
+     * @param string     $settingsKey
+     * @param string     $subDir
+     * @param array|null $settings
      *
      * @return array
      * @throws \yii\base\Exception
      */
-    public function getCustomConfig($settingsKey, $subDir)
+    public function getCustomConfig($settingsKey, $subDir, $settings = null)
     {
-        $file = $this->getSettings()->$settingsKey;
-        $path = \Craft::$app->getPath()->getConfigPath() . $subDir . DIRECTORY_SEPARATOR . $file;
+        if (!empty($settings) && is_array($settings) && isset($settings[$settingsKey])) {
+            $file = $settings[$settingsKey];
+        } else {
+            $file = $this->getSettings()->$settingsKey;
+        }
+
+        $path = implode(DIRECTORY_SEPARATOR, [
+            \Craft::$app->getPath()->getConfigPath(),
+            $subDir,
+            $file,
+        ]);
 
         if (!$file || !file_exists($path)) {
 
@@ -114,7 +124,10 @@ class Plugin extends \craft\base\Plugin
     public function getCustomConfigOptions($dir)
     {
         $options = ['' => Craft::t('froala-editor', 'Default')];
-        $path = \Craft::$app->getPath()->getConfigPath() . DIRECTORY_SEPARATOR . $dir;
+        $path = implode(DIRECTORY_SEPARATOR, [
+            \Craft::$app->getPath()->getConfigPath(),
+            $dir,
+        ]);
 
         if (is_dir($path)) {
 

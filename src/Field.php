@@ -41,6 +41,11 @@ class Field extends \craft\base\Field
     public $assetsFilesSubPath = '';
 
     /**
+     * @var string The name of the custom editor configuration for this field
+     */
+    public $editorConfig = '';
+
+    /**
      * @var \craft\base\Model
      */
     private $pluginSettings;
@@ -69,8 +74,9 @@ class Field extends \craft\base\Field
     public function getSettingsHtml()
     {
         return Craft::$app->getView()->renderTemplate('froala-editor/field/settings', [
-            'field'   => $this,
-            'plugins' => $this->pluginSettings->enabledPlugins,
+            'field'               => $this,
+            'pluginSettings'      => $this->pluginSettings,
+            'editorConfigOptions' => Plugin::getInstance()->getCustomConfigOptions('froalaeditor'),
         ]);
     }
 
@@ -92,33 +98,38 @@ class Field extends \craft\base\Field
         $nsId = $view->namespaceInputId($id);
 
         Plugin::getInstance()->fieldService->setElement($element);
+        $pluginSettings = $this->pluginSettings->toArray();
 
         // start input editor settings
         $site = ($element ? $element->getSite() : Craft::$app->getSites()->currentSite);
         $settings = [
             'id'             => $nsId,
             'isAdmin'        => Craft::$app->user->getIsAdmin(),
-            'editorConfig'   => [
-                'craftElementSiteId'         => $site->id,
-                'craftLinkElementType'       => Entry::class,
-                'craftLinkElementRefHandle'  => Entry::refHandle(),
-                'craftAssetElementType'      => Asset::class,
-                'craftAssetElementRefHandle' => Asset::refHandle(),
-                'craftImageTransforms'       => Plugin::getInstance()->fieldService->getTransforms(),
-                'craftImageSources'          => [
-                    Plugin::getInstance()->fieldService->determineFolderId(
-                        $this->assetsImagesSource,
-                        $this->assetsImagesSubPath
-                    ),
+            'editorConfig'   => array_merge(
+                [
+                    'craftElementSiteId'         => $site->id,
+                    'craftLinkElementType'       => Entry::class,
+                    'craftLinkElementRefHandle'  => Entry::refHandle(),
+                    'craftAssetElementType'      => Asset::class,
+                    'craftAssetElementRefHandle' => Asset::refHandle(),
+                    'craftImageTransforms'       => Plugin::getInstance()->fieldService->getTransforms(),
+                    'craftImageSources'          => [
+                        Plugin::getInstance()->fieldService->determineFolderId(
+                            $this->assetsImagesSource,
+                            $this->assetsImagesSubPath
+                        ),
+                    ],
+                    'craftFileSources'           => [
+                        Plugin::getInstance()->fieldService->determineFolderId(
+                            $this->assetsFilesSource,
+                            $this->assetsFilesSubPath
+                        ),
+                    ],
                 ],
-                'craftFileSources'           => [
-                    Plugin::getInstance()->fieldService->determineFolderId(
-                        $this->assetsFilesSource,
-                        $this->assetsFilesSubPath
-                    ),
-                ],
-            ],
-            'pluginSettings' => $this->pluginSettings->toArray(),
+                Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $pluginSettings),
+                Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $this->getSettings())
+            ),
+            'pluginSettings' => $pluginSettings,
             'fieldSettings'  => $this->getSettings(),
             'corePlugins'    => array_keys(FroalaAsset::CORE_PLUGINS),
         ];
@@ -238,6 +249,7 @@ class Field extends \craft\base\Field
      *
      * @param string                $value
      * @param ElementInterface|null $element
+     *
      * @return string
      */
     private function _parseRefs(string $value, ElementInterface $element = null): string
