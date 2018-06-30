@@ -3,6 +3,7 @@
 namespace froala\craftfroalawysiwyg;
 
 use Craft;
+use craft\enums\LicenseKeyStatus;
 use craft\helpers\FileHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
@@ -45,18 +46,30 @@ class Plugin extends \craft\base\Plugin
             'fieldService' => FieldService::class,
         ]);
 
-        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function (RegisterComponentTypesEvent $e) {
-            $e->types[] = Field::class;
-        });
+        Event::on(
+            Fields::class,
+            Fields::EVENT_REGISTER_FIELD_TYPES,
+            function (RegisterComponentTypesEvent $e) {
+                $e->types[] = Field::class;
+            }
+        );
 
-        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function (RegisterUrlRulesEvent $event) {
-            $event->rules['froala-editor/settings'] = 'froala-editor/settings/show';
-            $event->rules['froala-editor/settings/<settingsType:{handle}>'] = 'froala-editor/settings/show';
-        });
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_CP_URL_RULES,
+            function (RegisterUrlRulesEvent $event) {
+                $event->rules['froala-editor/settings'] = 'froala-editor/settings/show';
+                $event->rules['froala-editor/settings/<settingsType:{handle}>'] = 'froala-editor/settings/show';
+            }
+        );
 
-        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function (Event $event) {
-            $event->sender->set('froala', FroalaVariable::class);
-        });
+        Event::on(
+            CraftVariable::class,
+            CraftVariable::EVENT_INIT,
+            function (Event $event) {
+                $event->sender->set('froala', FroalaVariable::class);
+            }
+        );
     }
 
     /**
