@@ -5,11 +5,28 @@
 {% set uploadInstructions = uploadInstructions ~ ' Note that the subfolder path can contain variables like <code>{slug}</code> or <code>{author.username}</code>.' %}
 
 {{ forms.field({
-    label: 'Images Location'|t,
-    instructions: uploadInstructions|t,
+    label: 'Images Location'|t('froala-editor'),
+    instructions: uploadInstructions|t('froala-editor'),
 }, macros.uploadLocationInput('assetsImages', field.settings)) }}
 
 {{ forms.field({
-    label: 'Files Location'|t,
-    instructions: uploadInstructions|t,
+    label: 'Files Location'|t('froala-editor'),
+    instructions: uploadInstructions|t('froala-editor'),
 }, macros.uploadLocationInput('assetsFiles', field.settings)) }}
+
+<hr>
+
+{{ forms.selectField({
+    id: 'froala-editor-config',
+    label: "Custom Editor Config"|t('froala-editor'),
+    name: 'editorConfig',
+    options: editorConfigOptions,
+    value: field.settings.editorConfig,
+    instructions: "You can save custom {name} configs as {ext} files in {path}."|t('froala-editor', {
+        name: 'Froala Editor',
+        ext: '`.json`',
+        path: '`config/froalaeditor/`'
+    }) ~
+    ' <a href="https://www.froala.com/wysiwyg-editor/docs/options" target="_blank">' ~ "View available options"|t ~ '</a>',
+    warning: (pluginSettings.editorConfig is not empty) ? 'If you set this to something else than "Default", it will override the plugin setting.' | t('froala-editor') : ''
+}) }}

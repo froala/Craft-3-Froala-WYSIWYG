@@ -27,12 +27,12 @@ class Settings extends Model
     /**
      * @var string
      */
-    public $purifierConfig = 'default';
+    public $purifierConfig = '';
 
     /**
      * @var string
      */
-    public $editorConfig = 'default';
+    public $editorConfig = '';
 
     /**
      * @var string

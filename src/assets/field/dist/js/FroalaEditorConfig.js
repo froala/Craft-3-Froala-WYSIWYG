@@ -11,7 +11,7 @@
             this.pluginSettings = this.settings.pluginSettings;
             this.fieldSettings = this.settings.fieldSettings;
 
-            this.config = settings.editorConfig;
+            this.config = this.settings.editorConfig;
             this.config.key = this.pluginSettings.licenseKey;
             this.config.theme = 'craftcms';
 
@@ -28,30 +28,26 @@
             this.config.scrollableContainer = '#' + this.settings.id + '-field';
         },
         assembleParagraphStyles: function () {
-            var list = {};
-
-            if (this.fieldSettings.customCssClassesOverride !== 1) {
-                var pluginRows = this.pluginSettings.customCssClasses;
-                $.each(pluginRows, function (index, value) {
-                    list[value.className] = value.displayName;
-                });
+            if (typeof this.config.paragraphStyles !== undefined) {
+                return;
             }
 
-            var fieldRows = this.fieldSettings.customCssClasses;
-            $.each(fieldRows, function (index, value) {
+            var list = {};
+
+            var pluginRows = this.pluginSettings.customCssClasses;
+            $.each(pluginRows, function (index, value) {
                 list[value.className] = value.displayName;
             });
 
             this.config.paragraphStyles = list;
         },
         assembleEnabledPlugins: function () {
-            var list = [],
-                enabledPlugins = this.pluginSettings.enabledPlugins,
-                fieldPlugins = this.fieldSettings.enabledPlugins;
-
-            if (fieldPlugins !== '*' && $.isArray(fieldPlugins)) {
-                enabledPlugins = fieldPlugins;
+            if (typeof this.config.pluginsEnabled !== undefined) {
+                return;
             }
+
+            var list = [],
+                enabledPlugins = this.pluginSettings.enabledPlugins;
 
             if (enabledPlugins !== '*' && $.isArray(enabledPlugins)) {
                 for (var i = 0; i < enabledPlugins.length; i++) {
@@ -77,10 +73,19 @@
             }
         },
         assembleToolbarButtons: function () {
-            this.config.toolbarButtons = this.getToolbarButtons('lg');
-            this.config.toolbarButtonsMD = this.getToolbarButtons('md');
-            this.config.toolbarButtonsSM = this.getToolbarButtons('sm');
-            this.config.toolbarButtonsXS = this.getToolbarButtons('xs');
+            if (typeof this.config.toolbarButtons === undefined) {
+                this.config.toolbarButtons = this.getToolbarButtons('lg');
+            }
+            if (typeof this.config.toolbarButtonsMD === undefined) {
+                this.config.toolbarButtonsMD = this.getToolbarButtons('md');
+            }
+            if (typeof this.config.toolbarButtonsSM === undefined) {
+                this.config.toolbarButtonsSM = this.getToolbarButtons('sm');
+            }
+            if (typeof this.config.toolbarButtonsXS === undefined) {
+                this.config.toolbarButtonsXS = this.getToolbarButtons('xs');
+            }
+
             // disable quick insert for now
             this.config.quickInsertButtons = false;
             this.config.quickInsertTags = [''];
