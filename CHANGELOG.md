@@ -1,5 +1,12 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## v2.8.1-rc.3 - 2018-06-30
+
+## Changed
+
+- Loading translations from the Froala-editor category (instead of none).
+- Formatted plugin init() method to easier read the event-listeners.
+
 ## v2.8.1-rc.2 - 2018-06-30
 
 ### Added
