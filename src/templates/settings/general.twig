@@ -13,23 +13,23 @@
 
     {% if settings.licenseKey is empty %}
         <div class="warning">
-            The Craft CMS plugin does not include a license for the editor. To get one, visit the
-            <a href="https://www.froala.com/wysiwyg-editor/pricing" target="_blank">Froala website</a>.
+            {{ 'The Craft CMS plugin does not include a license for the editor. To get one, visit the'|t('froala-editor') }}
+            <a href="https://www.froala.com/wysiwyg-editor/pricing" target="_blank">{{ 'Froala website'|t('froala-editor') }}</a>.
         </div>
     {% endif %}
 
     {{ forms.selectField({
         id: 'froala-editor-config',
-        label: "Custom Editor Config"|t(),
+        label: "Custom Editor Config"|t('froala-editor'),
         name: 'settings[editorConfig]',
         options: editorConfigOptions,
         value: settings.editorConfig,
-        instructions: "You can save custom {name} configs as {ext} files in {path}."|t({
+        instructions: "You can save custom {name} configs as {ext} files in {path}."|t('froala-editor', {
             name: 'Froala Editor',
             ext: '`.json`',
             path: '`config/froalaeditor/`'
         }) ~
-        ' <a href="https://www.froala.com/wysiwyg-editor/docs/options" target="_blank">' ~ "View available options"|t ~ '</a>'
+        ' <a href="https://www.froala.com/wysiwyg-editor/docs/options" target="_blank">' ~ "View available options"|t('froala-editor') ~ '</a>'
     }) }}
 
     <hr>
@@ -61,12 +61,12 @@
                 name: 'settings[purifierConfig]',
                 options: purifierConfigOptions,
                 value: settings.purifierConfig,
-                instructions: "You can save custom {name} configs as {ext} files in {path}."|t({
+                instructions: "You can save custom {name} configs as {ext} files in {path}."|t('froala-editor', {
                     name: 'HTML Purifier Config',
                     ext: '`.json`',
                     path: '`config/htmlpurifier/`'
                 }) ~
-                ' <a href="http://htmlpurifier.org/live/configdoc/plain.html" target="_blank">' ~ "View available settings"|t ~ '</a>'
+                ' <a href="http://htmlpurifier.org/live/configdoc/plain.html" target="_blank">' ~ "View available settings"|t('froala-editor') ~ '</a>'
             }) }}
         </div>
     </div>
