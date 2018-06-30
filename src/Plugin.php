@@ -27,12 +27,12 @@ class Plugin extends \craft\base\Plugin
     /**
      * @var string
      */
-    public $changelogUrl = 'https://raw.githubusercontent.com/bertoost/Craft-3-Froala-WYSIWYG/master/CHANGELOG.md';
+    public $changelogUrl = 'https://raw.githubusercontent.com/froala/Craft-3-Froala-WYSIWYG/master/CHANGELOG.md';
 
     /**
      * @var string
      */
-    public $downloadUrl = 'https://github.com/bertoost/Craft-3-Froala-WYSIWYG/archive/master.zip';
+    public $downloadUrl = 'https://github.com/froala/Craft-3-Froala-WYSIWYG/archive/master.zip';
 
     /**
      * @inheritdoc
