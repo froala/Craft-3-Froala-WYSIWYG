@@ -274,4 +274,9 @@
         }
     }));
 
+    /*
+        SHORTCUT REPLACEMENT FOR CRAFT'S SAVE ACTION
+     */
+
+    $.FroalaEditor.RegisterShortcut($.FE.KEYCODE.S, null, null, null, false, false);
 }));

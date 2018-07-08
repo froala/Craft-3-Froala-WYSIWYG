@@ -4,8 +4,10 @@
 
 ### Changed
 
+- [#2] Fixed hitting control/cmd+s when editor is focused and saving the element.
 - [#3] Fixed issue reqarding disabling enabled plugins.
 
+[#2]: https://github.com/froala/Craft-3-Froala-WYSIWYG/issues/2
 [#3]: https://github.com/froala/Craft-3-Froala-WYSIWYG/issues/3
 
 ### Added
