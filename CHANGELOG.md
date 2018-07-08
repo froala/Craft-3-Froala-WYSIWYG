@@ -1,5 +1,11 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## v2.8.1-rc.5 - 2018-07-08
+
+### Changed
+
+- Fixed composer dependency version constraint to use exact version of Froala Editor (v2.8.1)
+
 ## v2.8.1-rc.4 - 2018-07-08
 
 ### Changed
