@@ -80,7 +80,7 @@
                 {
                     transforms: editor.opts.craftImageTransforms
                 },
-                function(elements) {
+                function (elements) {
                     if ($currentImage) {
                         editor.image.edit($currentImage);
                     } else {
@@ -115,7 +115,7 @@
                 editor.opts.craftImageSources,
                 editor.opts.craftImageCriteria,
                 null,
-                function(assets, transform) {
+                function (assets, transform) {
                     if (assets.length) {
                         for (var i = 0; i < assets.length; i++) {
                             var asset = assets[i],
@@ -158,7 +158,7 @@
                     disabledElementIds: disabledElementIds,
                     transforms: editor.opts.craftImageTransforms
                 },
-                function(assets, transform) {
+                function (assets, transform) {
                     if (assets.length) {
                         for (var i = 0; i < assets.length; i++) {
                             var asset = assets[i],
@@ -189,7 +189,7 @@
                 editor.opts.craftFileSources,
                 editor.opts.craftFileCriteria,
                 null,
-                function(elements) {
+                function (elements) {
                     if (elements.length) {
                         var element = elements[0],
                             url = element.url + '#' + editor.opts.craftLinkElementRefHandle + ':' + element.id,
@@ -259,7 +259,7 @@
     }));
 
     $.FE.RegisterCommand('imageReplace', $.extend($.FE.COMMANDS['imageReplace'], {
-        callback: function(cmd, val) {
+        callback: function (cmd, val) {
             this.craft.showImageReplaceModal();
         }
     }));
