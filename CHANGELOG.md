@@ -10,6 +10,7 @@
 
 ### Added
 
+- Support for passing Craft's target language as editor language (if exists)
 - [#4] Example JSON config added to the repository
 
 [#4]: https://github.com/froala/Craft-3-Froala-WYSIWYG/issues/4

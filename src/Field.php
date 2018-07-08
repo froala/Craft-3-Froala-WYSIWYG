@@ -125,6 +125,7 @@ class Field extends \craft\base\Field
                             $this->assetsFilesSubPath
                         ),
                     ],
+                    "language" => FroalaAsset::getLanguage(),
                 ],
                 Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $pluginSettings),
                 Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $this->getSettings())
