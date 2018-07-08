@@ -125,6 +125,7 @@ class Field extends \craft\base\Field
                             $this->assetsFilesSubPath
                         ),
                     ],
+                    "language" => FroalaAsset::getLanguage(),
                 ],
                 Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $pluginSettings),
                 Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $this->getSettings())
@@ -158,8 +159,12 @@ class Field extends \craft\base\Field
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        if ($value === null || $value instanceof \Twig_Markup) {
+        if ($value instanceof FieldData) {
             return $value;
+        }
+
+        if (!$value) {
+            return null;
         }
 
         // Prevent everyone from having to use the |raw filter when outputting RTE content
@@ -177,10 +182,7 @@ class Field extends \craft\base\Field
         }
 
         // Get the raw value
-        $value = (string)$value;
-        if (!$value) {
-            return null;
-        }
+        $value = $value->getRawContent();
 
         if ($this->pluginSettings->purifyHtml) {
             // Parse reference tags so HTMLPurifier doesn't encode the curly braces

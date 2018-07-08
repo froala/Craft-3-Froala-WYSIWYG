@@ -1,8 +1,25 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## v2.8.1-rc.4 - 2018-07-08
+
+### Changed
+
+- [#2] Fixed hitting control/cmd+s when editor is focused and saving the element.
+- [#3] Fixed issue reqarding disabling enabled plugins.
+
+[#2]: https://github.com/froala/Craft-3-Froala-WYSIWYG/issues/2
+[#3]: https://github.com/froala/Craft-3-Froala-WYSIWYG/issues/3
+
+### Added
+
+- Support for passing Craft's target language as editor language (if exists)
+- [#4] Example JSON config added to the repository
+
+[#4]: https://github.com/froala/Craft-3-Froala-WYSIWYG/issues/4
+
 ## v2.8.1-rc.3 - 2018-06-30
 
-## Changed
+### Changed
 
 - Loading translations from the Froala-editor category (instead of none).
 - Formatted plugin init() method to easier read the event-listeners.

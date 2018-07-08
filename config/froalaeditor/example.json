@@ -1,0 +1,16 @@
+{
+  "paragraphFormat": {
+    "N": "Normal",
+    "H1": "Heading 1",
+    "H2": "Heading 2",
+    "H3": "Heading 3",
+    "H4": "Heading 4",
+    "PRE": "Code"
+  },
+  "paragraphStyles": {
+    "fr-text-gray": "Gray",
+    "fr-text-bordered": "Bordered",
+    "fr-text-spaced": "Spaced",
+    "fr-text-uppercase": "Uppercase"
+  }
+}
