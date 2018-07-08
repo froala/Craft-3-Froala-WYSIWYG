@@ -1,8 +1,16 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## Unreleased
+
+### Changed
+
+- [#3] Fixed issue reqarding disabling enabled plugins.
+
+[#3]: https://github.com/froala/Craft-3-Froala-WYSIWYG/issues/3 
+
 ## v2.8.1-rc.3 - 2018-06-30
 
-## Changed
+### Changed
 
 - Loading translations from the Froala-editor category (instead of none).
 - Formatted plugin init() method to easier read the event-listeners.
