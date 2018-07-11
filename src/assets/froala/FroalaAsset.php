@@ -125,7 +125,7 @@ class FroalaAsset extends AssetBundle
             $files = FileHelper::findFiles($path, [
                 'only'      => $filter,
                 'recursive' => false,
-                'except'    => ['quick_insert.min.js'],
+                'except'    => ['quick_insert.min.js', 'code_view.min.js'],
             ]);
 
             foreach ($files as $pluginFile) {

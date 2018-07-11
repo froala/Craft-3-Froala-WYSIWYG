@@ -1,5 +1,15 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## v2.8.1
+
+### Added
+
+- Permission to grant users or groups to toggle HTML code view (not admins only).
+
+### Removed
+
+- Code view option via plugin settings (since it's a permission now).
+
 ## v2.8.1-rc.5 - 2018-07-08
 
 ### Changed
