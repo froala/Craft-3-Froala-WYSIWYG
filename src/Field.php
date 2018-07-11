@@ -104,7 +104,7 @@ class Field extends \craft\base\Field
         $site = ($element ? $element->getSite() : Craft::$app->getSites()->currentSite);
         $settings = [
             'id'             => $nsId,
-            'isAdmin'        => Craft::$app->user->getIsAdmin(),
+            'allowCodeView'  => Craft::$app->getUser()->checkPermission('froala-allowCodeView'),
             'editorConfig'   => array_merge(
                 [
                     'craftElementSiteId'         => $site->id,

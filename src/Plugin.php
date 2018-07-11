@@ -3,11 +3,12 @@
 namespace froala\craftfroalawysiwyg;
 
 use Craft;
-use craft\enums\LicenseKeyStatus;
+use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\FileHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use froala\craftfroalawysiwyg\variables\FroalaVariable;
@@ -68,6 +69,16 @@ class Plugin extends \craft\base\Plugin
             CraftVariable::EVENT_INIT,
             function (Event $event) {
                 $event->sender->set('froala', FroalaVariable::class);
+            }
+        );
+
+        Event::on(
+            UserPermissions::class,
+            UserPermissions::EVENT_REGISTER_PERMISSIONS,
+            function(RegisterUserPermissionsEvent $event) {
+                $event->permissions[Craft::t('froala-editor', 'Froala WYSIWYG Editor')] = [
+                    'froala-allowCodeView' => ['label' => Craft::t('froala-editor', 'Enable HTML Code view button')],
+                ];
             }
         );
     }
