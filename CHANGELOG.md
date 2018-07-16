@@ -1,5 +1,11 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## Unreleased
+
+### Changed
+
+- Fixed issue regarding inserting a file link with correct Craft's Asset referenced-tag `{asset:<id>}`. 
+
 ## v2.8.4 - 2018-07-15
 
 ### Changed
