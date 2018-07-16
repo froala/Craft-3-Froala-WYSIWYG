@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Fixed issue with updating a file link and the Link update popup window.
 - Fixed issue regarding inserting a file link with correct Craft's Asset referenced-tag `{asset:<id>}`. 
 
 ## v2.8.4 - 2018-07-15
