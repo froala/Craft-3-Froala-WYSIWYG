@@ -1,5 +1,11 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## v2.8.4.2 - 2018-07-19
+
+### Changed
+
+- Fixed bug loading Craft integrations when Enabled Plugins setting is set to something else than "All".
+
 ## v2.8.4.1 - 2018-07-18
 
 ### Changed
