@@ -1,5 +1,17 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## Unreleased
+
+### Changed
+
+- Fixed loading custom CSS type via Asset bundle.
+- Fixed issue with updating a file link and the Link update popup window.
+- Fixed issue regarding inserting a file link with correct Craft's Asset referenced-tag `{asset:<id>}`.
+
+### Removed
+
+- Removed plugin support for custom CSS file loading. Since Craft 3 doesn't give the ability. 
+
 ## v2.8.4 - 2018-07-15
 
 ### Changed

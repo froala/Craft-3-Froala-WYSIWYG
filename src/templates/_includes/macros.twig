@@ -5,21 +5,12 @@
         { label : 'Default', value: '' }
     ] -%}
 
-    {# add-in asset resources -#}
+    {# add-in volumes -#}
     {% set craftVolumes = craft.app.volumes.getAllVolumes() -%}
     {% if craftVolumes is not empty -%}
         {% set customCssOptions = customCssOptions|merge([{ optgroup: 'Volumes' }]) -%}
         {% for volume in craftVolumes -%}
-            {% set customCssOptions = customCssOptions|merge({ ('folder:' ~ volume.id): volume.name }) -%}
-        {%- endfor %}
-    {%- endif %}
-
-    {# add-in plugins -#}
-    {% set craftPlugins = craft.app.plugins.getAllPluginInfo() -%}
-    {% if craftPlugins is not empty -%}
-        {% set customCssOptions = customCssOptions|merge([{ optgroup: 'Plugin resource' }]) -%}
-        {% for pluginHandle, plugin in craftPlugins -%}
-            {% set customCssOptions = customCssOptions|merge({ ('plugin:' ~ pluginHandle): plugin.name }) -%}
+            {% set customCssOptions = customCssOptions|merge({ ('volume:' ~ volume.id): volume.name }) -%}
         {%- endfor %}
     {%- endif %}
 
@@ -37,7 +28,7 @@
                 </div>
             </div>
             <div class="flex-grow">
-                {% set fieldKey = name ~ 'Type' -%}
+                {% set fieldKey = name ~ 'File' -%}
                 {{ text({
                     id: fieldKey,
                     class: 'ltr',
