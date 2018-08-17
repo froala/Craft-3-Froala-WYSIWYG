@@ -1,5 +1,12 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## v2.8.4.3 - 2018-08-17
+
+### Changed
+
+- Fixed adding code-view plugin to enabled plugins when allowed to see code (permissions)
+- Fixed comparing enabled plugins regarding core plugins
+
 ## v2.8.4.2 - 2018-07-19
 
 ### Changed
