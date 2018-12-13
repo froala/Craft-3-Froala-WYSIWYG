@@ -14,6 +14,7 @@
   "homepage": "https://github.com/froala/Craft-3-Froala-WYSIWYG",
   "license": "MIT",
   "require": {
+    "craftcms/cms": "^3.0.0",
     "froala/wysiwyg-editor": "2.8.4"
   },
   "autoload": {
