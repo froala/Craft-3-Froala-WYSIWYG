@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Made Craft CMS 3 as requirement for the package, since it's required for the plugin store
 - Updated editor to version 2.8.5 along with the plugin version
 
 ## v2.8.4.3 - 2018-08-17
