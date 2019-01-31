@@ -69,7 +69,7 @@ class Field extends \craft\base\Field
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSettingsHtml()
     {
@@ -81,7 +81,7 @@ class Field extends \craft\base\Field
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getContentColumnType(): string
     {
@@ -89,7 +89,8 @@ class Field extends \craft\base\Field
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @throws \Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -97,65 +98,77 @@ class Field extends \craft\base\Field
         $id = $view->formatInputId($this->handle);
         $nsId = $view->namespaceInputId($id);
 
-        Plugin::getInstance()->fieldService->setElement($element);
-        $pluginSettings = $this->pluginSettings->toArray();
+        try {
+            if (empty($this->assetsImagesSource) || $this->assetsFilesSource) {
+                throw new \Exception('Image and File sources are not properly configured for this field.');
+            }
 
-        // start input editor settings
-        $site = ($element ? $element->getSite() : Craft::$app->getSites()->currentSite);
-        $settings = [
-            'id'             => $nsId,
-            'allowCodeView'  => Craft::$app->getUser()->checkPermission('froala-allowCodeView'),
-            'editorConfig'   => array_merge(
-                [
-                    'craftElementSiteId'         => $site->id,
-                    'craftLinkElementType'       => Entry::class,
-                    'craftLinkElementRefHandle'  => Entry::refHandle(),
-                    'craftAssetElementType'      => Asset::class,
-                    'craftAssetElementRefHandle' => Asset::refHandle(),
-                    'craftImageTransforms'       => Plugin::getInstance()->fieldService->getTransforms(),
-                    'craftImageSources'          => [
-                        Plugin::getInstance()->fieldService->determineFolderId(
-                            $this->assetsImagesSource,
-                            $this->assetsImagesSubPath
-                        ),
+            $fieldService = Plugin::getInstance()->getFieldService();
+            $fieldService->setElement($element);
+
+            $pluginSettings = $this->pluginSettings->toArray();
+
+            // start input editor settings
+            $site = ($element ? $element->getSite() : Craft::$app->getSites()->currentSite);
+            $settings = [
+                'id' => $nsId,
+                'allowCodeView' => Craft::$app->getUser()->checkPermission('froala-allowCodeView'),
+                'editorConfig' => array_merge(
+                    [
+                        'craftElementSiteId' => $site->id,
+                        'craftLinkElementType' => Entry::class,
+                        'craftLinkElementRefHandle' => Entry::refHandle(),
+                        'craftAssetElementType' => Asset::class,
+                        'craftAssetElementRefHandle' => Asset::refHandle(),
+                        'craftImageTransforms' => $fieldService->getTransforms(),
+                        'craftImageSources' => [
+                            $fieldService->determineFolderId($this->assetsImagesSource, $this->assetsImagesSubPath)
+                        ],
+                        'craftFileSources' => [
+                            $fieldService->determineFolderId($this->assetsFilesSource, $this->assetsFilesSubPath)
+                        ],
+                        "language" => FroalaAsset::getLanguage(),
                     ],
-                    'craftFileSources'           => [
-                        Plugin::getInstance()->fieldService->determineFolderId(
-                            $this->assetsFilesSource,
-                            $this->assetsFilesSubPath
-                        ),
-                    ],
-                    "language" => FroalaAsset::getLanguage(),
-                ],
-                Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $pluginSettings),
-                Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $this->getSettings())
-            ),
-            'pluginSettings' => $pluginSettings,
-            'fieldSettings'  => $this->getSettings(),
-            'corePlugins'    => array_keys(FroalaAsset::CORE_PLUGINS),
-        ];
+                    Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $pluginSettings),
+                    Plugin::getInstance()->getCustomConfig('editorConfig', 'froalaeditor', $this->getSettings())
+                ),
+                'pluginSettings' => $pluginSettings,
+                'fieldSettings' => $this->getSettings(),
+                'corePlugins' => array_keys(FroalaAsset::CORE_PLUGINS),
+            ];
 
-        $view->registerAssetBundle(FieldAsset::class);
-        $view->registerJs('new Craft.FroalaEditorInput(' . Json::encode($settings) . ');');
+            $view->registerAssetBundle(FieldAsset::class);
+            $view->registerJs('new Craft.FroalaEditorInput(' . Json::encode($settings) . ');');
 
-        if ($value instanceof FieldData) {
-            $value = $value->getRawContent();
+            if ($value instanceof FieldData) {
+                $value = $value->getRawContent();
+            }
+
+            if ($value !== null) {
+                // Parse reference tags
+                $value = $this->_parseRefs($value, $element);
+            }
+
+            $viewData = [
+                'id'     => $id,
+                'handle' => $this->handle,
+                'value'  => htmlentities((string)$value, ENT_NOQUOTES, 'UTF-8'),
+            ];
+        }
+        catch (\Exception $e) {
+
+            Craft::$app->getErrorHandler()->logException($e);
+
+            $viewData = [
+                'error' => $e->getMessage(),
+            ];
         }
 
-        if ($value !== null) {
-            // Parse reference tags
-            $value = $this->_parseRefs($value, $element);
-        }
-
-        return Craft::$app->getView()->renderTemplate('froala-editor/field/input', [
-            'id'     => $id,
-            'handle' => $this->handle,
-            'value'  => htmlentities((string)$value, ENT_NOQUOTES, 'UTF-8'),
-        ]);
+        return Craft::$app->getView()->renderTemplate('froala-editor/field/input', $viewData);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -172,7 +185,7 @@ class Field extends \craft\base\Field
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
@@ -233,7 +246,7 @@ class Field extends \craft\base\Field
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isValueEmpty($value, ElementInterface $element): bool
     {

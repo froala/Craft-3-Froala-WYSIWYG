@@ -1,1 +1,8 @@
-<textarea id="{{ id }}" name="{{ handle }}" rows="5" style="width:100%;">{{ value|raw }}</textarea>
+{% if error is defined %}
+    <p class="warning">
+        <span data-icon="alert"></span>
+        {{ error | t('froala') }}
+    </p>
+{% else %}
+    <textarea id="{{ id }}" name="{{ handle }}" rows="5" style="width:100%;">{{ value|raw }}</textarea>
+{% endif %}

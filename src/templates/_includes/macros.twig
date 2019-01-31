@@ -44,39 +44,39 @@
 {% macro uploadLocationInput(name, settings) %}
     {% from "_includes/forms" import select, text %}
 
-    {% set volumeOptions = [
-        { label: 'Default webroot', value: '' }
-    ] -%}
+    {% set volumeOptions = [] -%}
+    {% for volume in craft.app.volumes.getAllVolumes() -%}
+        {% set volumeOptions = volumeOptions|merge({ ('folder:' ~ volume.id): volume.name }) -%}
+    {%- endfor %}
 
-    {% set craftVolumes = craft.app.volumes.getAllVolumes() -%}
-    {% if craftVolumes is not empty -%}
-        {% set volumeOptions = volumeOptions|merge([{ optgroup: 'Volumes' }]) -%}
-        {% for volume in craftVolumes -%}
-            {% set volumeOptions = volumeOptions|merge({ ('folder:' ~ volume.id): volume.name }) -%}
-        {%- endfor %}
-    {%- endif %}
-
-    <div class="input ltr">
-        <div class="flex">
-            <div>
-                <div class="select">
-                    {{ select({
-                        id: name ~ 'Source',
-                        name: name ~ 'Source',
-                        options: volumeOptions,
-                        value: settings[name ~ 'Source'],
+    {% if volumeOptions is not empty %}
+        <div class="input ltr">
+            <div class="flex">
+                <div>
+                    <div class="select">
+                        {{ select({
+                            id: name ~ 'Source',
+                            name: name ~ 'Source',
+                            options: volumeOptions,
+                            value: settings[name ~ 'Source'],
+                        }) }}
+                    </div>
+                </div>
+                <div class="flex-grow">
+                    {{ text({
+                        id: name ~ 'SubPath',
+                        class: 'ltr',
+                        name: name ~ 'SubPath',
+                        value: settings[name ~ 'SubPath'],
+                        placeholder: "path/to/subfolder"|t
                     }) }}
                 </div>
             </div>
-            <div class="flex-grow">
-                {{ text({
-                    id: name ~ 'SubPath',
-                    class: 'ltr',
-                    name: name ~ 'SubPath',
-                    value: settings[name ~ 'SubPath'],
-                    placeholder: "path/to/subfolder"|t
-                }) }}
-            </div>
         </div>
-    </div>
+    {% else %}
+        <p class="warning">
+            <span data-icon="alert"></span>
+            {{ 'No sources exist yet.' | t('app') }}
+        </p>
+    {% endif %}
 {% endmacro %}
