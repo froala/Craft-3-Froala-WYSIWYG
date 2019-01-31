@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Improved checks on existence of image and file asset sources (volumes)
 - Updated editor to version 2.9.2 along with the plugin version
 
 ## v2.9.1 - 2018-12-13
