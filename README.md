@@ -30,6 +30,6 @@ Once you have a license, for your domain, you can enter the license key in the p
 
 Froala Editor is a beautiful WYSIWYG editor for editing web pages.
 
-Therefor the editor needs a license. You can buy one at [the website](https://www.froala.com/wysiwyg-editor/pricing).
+Note: the editor needs a license. You can buy one at [their website](https://www.froala.com/wysiwyg-editor/pricing).
 
 Once purchased a license, you can enter the license key in your Craft CMS settings page.
