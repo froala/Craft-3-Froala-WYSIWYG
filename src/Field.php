@@ -99,7 +99,7 @@ class Field extends \craft\base\Field
         $nsId = $view->namespaceInputId($id);
 
         try {
-            if (empty($this->assetsImagesSource) || $this->assetsFilesSource) {
+            if (empty($this->assetsImagesSource) || empty($this->assetsFilesSource)) {
                 throw new \Exception('Image and File sources are not properly configured for this field.');
             }
 
