@@ -1,5 +1,11 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## v2.9.1 - 2019-02-07
+
+### Changed
+
+- Fixed checking volumes and displaying editor when configured well (#7)
+
 ## v2.9.2 - 2019-01-31
 
 ### Changed
