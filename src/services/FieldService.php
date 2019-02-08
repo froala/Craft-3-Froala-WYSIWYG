@@ -2,6 +2,7 @@
 
 namespace froala\craftfroalawysiwyg\services;
 
+use Craft;
 use craft\base\Component;
 use craft\errors\InvalidSubpathException;
 use craft\errors\InvalidVolumeException;
@@ -9,6 +10,7 @@ use craft\helpers\Html;
 use craft\helpers\HtmlPurifier;
 use craft\models\FolderCriteria;
 use craft\models\VolumeFolder;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Class FieldVolume
@@ -110,23 +112,25 @@ class FieldService extends Component
     /**
      * @param VolumeFolder $folder
      * @return string
+     * @throws ServerErrorHttpException
      */
     private function getFolderParentsById($folder)
     {
         $tree = [];
+        $useUids = version_compare(Craft::$app->getInfo()->version, '3.1', '>=');
 
         // when reached folder already is the root folder
         if (empty($folder->parentId)) {
-            $tree[] = 'folder:' . $folder->id;
+            $tree[] = 'folder:' . $useUids ? $folder->uid : $folder->id;
         } else {
 
             $rootFolder = \Craft::$app->getAssets()->getRootFolderByVolumeId($folder->volumeId);
-            $tree[] = 'folder:' . $rootFolder->id;
+            $tree[] = 'folder:' . $useUids ? $rootFolder->uid : $rootFolder->id;
 
             $folderTree = \Craft::$app->getAssets()->getFolderTreeByFolderId($folder->id);
             foreach ($folderTree as $folder) {
 
-                $tree[] = 'folder:' . $folder->id;
+                $tree[] = 'folder:' . $useUids ? $folder->uid : $folder->id;
             }
         }
 
@@ -144,6 +148,7 @@ class FieldService extends Component
      * @throws InvalidSubpathException
      * @throws InvalidVolumeException
      * @throws \Exception
+     * @throws \Throwable
      */
     private function resolveSourcePathToFolderId($volumeId, $subPath, $createDynamicFolders = true)
     {

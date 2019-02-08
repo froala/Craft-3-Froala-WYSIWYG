@@ -1,10 +1,20 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
-## v2.9.1 - 2019-02-07
+## v2.9.2.2 - 2019-02-08
 
 ### Changed
 
-- Fixed checking volumes and displaying editor when configured well (#7)
+- Fixed being compatible with Craft CMS 3.1 regaring using UID's instead of ID's ([#8])
+
+[#8]: https://github.com/froala/Craft-3-Froala-WYSIWYG/pull/8
+
+## v2.9.2.1 - 2019-02-07
+
+### Changed
+
+- Fixed checking volumes and displaying editor when configured well ([#7])
+
+[#7]: https://github.com/froala/Craft-3-Froala-WYSIWYG/issues/7
 
 ## v2.9.2 - 2019-01-31
 
