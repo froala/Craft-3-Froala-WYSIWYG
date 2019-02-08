@@ -4,7 +4,9 @@
 
 ### Changed
 
-- Fixed checking volumes and displaying editor when configured well (#7)
+- Fixed checking volumes and displaying editor when configured well ([#7])
+
+[#7]: https://github.com/froala/Craft-3-Froala-WYSIWYG/issues/7
 
 ## v2.9.2 - 2019-01-31
 
