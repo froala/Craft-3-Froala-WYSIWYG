@@ -121,16 +121,16 @@ class FieldService extends Component
 
         // when reached folder already is the root folder
         if (empty($folder->parentId)) {
-            $tree[] = 'folder:' . $useUids ? $folder->uid : $folder->id;
+            $tree[] = 'folder:' . ($useUids ? $folder->uid : $folder->id);
         } else {
 
             $rootFolder = \Craft::$app->getAssets()->getRootFolderByVolumeId($folder->volumeId);
-            $tree[] = 'folder:' . $useUids ? $rootFolder->uid : $rootFolder->id;
+            $tree[] = 'folder:' . ($useUids ? $rootFolder->uid : $rootFolder->id);
 
             $folderTree = \Craft::$app->getAssets()->getFolderTreeByFolderId($folder->id);
             foreach ($folderTree as $folder) {
 
-                $tree[] = 'folder:' . $useUids ? $folder->uid : $folder->id;
+                $tree[] = 'folder:' . ($useUids ? $folder->uid : $folder->id);
             }
         }
 
