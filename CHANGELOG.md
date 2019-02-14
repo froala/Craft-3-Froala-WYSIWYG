@@ -1,5 +1,13 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## v2.9.2.3 - 2019-02-14
+
+### Changed
+
+- Fixed checks in shorthand if, concatenating strings, in field service (@Zae [#9])
+
+[#9]: https://github.com/froala/Craft-3-Froala-WYSIWYG/pull/9
+
 ## v2.9.2.2 - 2019-02-08
 
 ### Changed
