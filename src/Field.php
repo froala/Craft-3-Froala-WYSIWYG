@@ -317,6 +317,6 @@ class Field extends \craft\base\Field
      */
     private function getPluginSettings()
     {
-        return FroalaEditor::getInstance()->getSettings();
+        return Plugin::getInstance()->getSettings();
     }
 }
