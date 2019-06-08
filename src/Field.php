@@ -10,6 +10,7 @@ use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\validators\HandleValidator;
+use froala\craftfroalawysiwyg\models\Settings;
 use yii\db\Schema;
 
 use froala\craftfroalawysiwyg\assets\froala\FroalaAsset;
@@ -46,18 +47,22 @@ class Field extends \craft\base\Field
     public $editorConfig = '';
 
     /**
-     * @var \craft\base\Model
+     * @var Settings
      */
-    private $pluginSettings;
+    private $_pluginSettings;
 
     /**
-     * {@inheritdoc}
+     * Returns plugin settings.
+     *
+     * @return array|null
      */
-    public function init()
+    private function getPluginSettings()
     {
-        parent::init();
+        if (null === $this->_pluginSettings) {
+            $this->_pluginSettings = Plugin::getInstance()->getSettings();
+        }
 
-        $this->pluginSettings = Plugin::getInstance()->getSettings();
+        return $this->_pluginSettings;
     }
 
     /**
@@ -75,7 +80,7 @@ class Field extends \craft\base\Field
     {
         return Craft::$app->getView()->renderTemplate('froala-editor/field/settings', [
             'field'               => $this,
-            'pluginSettings'      => $this->pluginSettings,
+            'pluginSettings'      => $this->getPluginSettings(),
             'editorConfigOptions' => Plugin::getInstance()->getCustomConfigOptions('froalaeditor'),
         ]);
     }
@@ -106,7 +111,7 @@ class Field extends \craft\base\Field
             $fieldService = Plugin::getInstance()->getFieldService();
             $fieldService->setElement($element);
 
-            $pluginSettings = $this->pluginSettings->toArray();
+            $pluginSettings = $this->getPluginSettings()->toArray();
 
             // start input editor settings
             $site = ($element ? $element->getSite() : Craft::$app->getSites()->currentSite);
@@ -197,14 +202,14 @@ class Field extends \craft\base\Field
         // Get the raw value
         $value = $value->getRawContent();
 
-        if ($this->pluginSettings->purifyHtml) {
+        if ($this->getPluginSettings()->purifyHtml) {
             // Parse reference tags so HTMLPurifier doesn't encode the curly braces
             $value = $this->_parseRefs($value, $element);
 
             $value = HtmlPurifier::process($value, $this->getPurifierConfig());
         }
 
-        if ($this->pluginSettings->cleanupHtml) {
+        if ($this->getPluginSettings()->cleanupHtml) {
 
             // Remove <span> and <font> tags
             $value = preg_replace('/<(?:span|font)\b[^>]*>/', '', $value);
@@ -292,7 +297,7 @@ class Field extends \craft\base\Field
      */
     private function getPurifierConfig(): array
     {
-        if ($config = $this->getConfig('htmlpurifier', $this->pluginSettings->purifierConfig)) {
+        if ($config = $this->getConfig('htmlpurifier', $this->getPluginSettings()->purifierConfig)) {
             return $config;
         }
 
