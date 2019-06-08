@@ -46,21 +46,6 @@ class Field extends \craft\base\Field
     public $editorConfig = '';
 
     /**
-     * @var \craft\base\Model
-     */
-    private $pluginSettings;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init()
-    {
-        parent::init();
-
-        $this->pluginSettings = Plugin::getInstance()->getSettings();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public static function displayName(): string
@@ -75,7 +60,7 @@ class Field extends \craft\base\Field
     {
         return Craft::$app->getView()->renderTemplate('froala-editor/field/settings', [
             'field'               => $this,
-            'pluginSettings'      => $this->pluginSettings,
+            'pluginSettings'      => $this->getPluginSettings(),
             'editorConfigOptions' => Plugin::getInstance()->getCustomConfigOptions('froalaeditor'),
         ]);
     }
@@ -106,7 +91,7 @@ class Field extends \craft\base\Field
             $fieldService = Plugin::getInstance()->getFieldService();
             $fieldService->setElement($element);
 
-            $pluginSettings = $this->pluginSettings->toArray();
+            $pluginSettings = $this->getPluginSettings()->toArray();
 
             // start input editor settings
             $site = ($element ? $element->getSite() : Craft::$app->getSites()->currentSite);
@@ -197,14 +182,14 @@ class Field extends \craft\base\Field
         // Get the raw value
         $value = $value->getRawContent();
 
-        if ($this->pluginSettings->purifyHtml) {
+        if ($this->getPluginSettings()->purifyHtml) {
             // Parse reference tags so HTMLPurifier doesn't encode the curly braces
             $value = $this->_parseRefs($value, $element);
 
             $value = HtmlPurifier::process($value, $this->getPurifierConfig());
         }
 
-        if ($this->pluginSettings->cleanupHtml) {
+        if ($this->getPluginSettings()->cleanupHtml) {
 
             // Remove <span> and <font> tags
             $value = preg_replace('/<(?:span|font)\b[^>]*>/', '', $value);
@@ -292,7 +277,7 @@ class Field extends \craft\base\Field
      */
     private function getPurifierConfig(): array
     {
-        if ($config = $this->getConfig('htmlpurifier', $this->pluginSettings->purifierConfig)) {
+        if ($config = $this->getConfig('htmlpurifier', $this->getPluginSettings()->purifierConfig)) {
             return $config;
         }
 
@@ -323,5 +308,15 @@ class Field extends \craft\base\Field
         }
 
         return Json::decode(file_get_contents($path));
+    }
+
+    /**
+     * Returns plugin settings.
+     *
+     * @return array|null
+     */
+    private function getPluginSettings()
+    {
+        return Plugin::getInstance()->getSettings();
     }
 }
