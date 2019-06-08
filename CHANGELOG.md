@@ -1,5 +1,11 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+## Unreleased
+
+### Changed
+
+- Fix `Call to a member function getSettings() on null` by @reganlawton
+
 ## v2.9.3 - 2019-03-01
 
 ### Changed

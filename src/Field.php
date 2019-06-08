@@ -10,6 +10,7 @@ use craft\helpers\HtmlPurifier;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use craft\validators\HandleValidator;
+use froala\craftfroalawysiwyg\models\Settings;
 use yii\db\Schema;
 
 use froala\craftfroalawysiwyg\assets\froala\FroalaAsset;
@@ -44,6 +45,25 @@ class Field extends \craft\base\Field
      * @var string The name of the custom editor configuration for this field
      */
     public $editorConfig = '';
+
+    /**
+     * @var Settings
+     */
+    private $_pluginSettings;
+
+    /**
+     * Returns plugin settings.
+     *
+     * @return array|null
+     */
+    private function getPluginSettings()
+    {
+        if (null === $this->_pluginSettings) {
+            $this->_pluginSettings = Plugin::getInstance()->getSettings();
+        }
+
+        return $this->_pluginSettings;
+    }
 
     /**
      * {@inheritdoc}
@@ -308,15 +328,5 @@ class Field extends \craft\base\Field
         }
 
         return Json::decode(file_get_contents($path));
-    }
-
-    /**
-     * Returns plugin settings.
-     *
-     * @return array|null
-     */
-    private function getPluginSettings()
-    {
-        return Plugin::getInstance()->getSettings();
     }
 }
