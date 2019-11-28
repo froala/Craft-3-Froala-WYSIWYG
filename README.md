@@ -63,6 +63,43 @@ For example, if you created a `config/froalaeditor/Simple.json` file with the fo
 
 See the [Froala documentation](https://www.froala.com/wysiwyg-editor/docs/options) for a list of available config options and buttons.
 
+## Third party plugins
+
+```html
+ <!-- Include Font Awesome. -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <script src="static/bower_components/froala-wysiwyg-editor/js/third_party/font_awesome.min.js"></script>
+
+<!-- Include Spell Checker -->
+<script src="static/bower_components/froala-wysiwyg-editor/js/third_party/spell_checker.min.js"></script>
+
+<!-- Customer Id for Spell Checker -->
+new FroalaEditor('#edit', {
+        scaytCustomerId: 'speel checker customer Id',
+})
+
+<!-- Include Embedly -->
+<script src="static/bower_components/froala-wysiwyg-editor/js/third_party/embedly.min.js"></script>
+
+<!-- Spell Checker -->
+<script src="static/bower_components/froala-wysiwyg-editor/js/third_party/spell_checker.min.js"></script>
+
+<!-- TUI Image Editor -->
+
+<!-- Include TUI JS. -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.7/fabric.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/tui-code-snippet@1.4.0/dist/tui-code-snippet.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/tui-image-editor@3.2.2/dist/tui-image-editor.min.js"></script>
+
+<script src="static/bower_components/froala-wysiwyg-editor/js/third_party/image_tui.min.js"></script>
+
+<!-- Include TUI CSS. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tui-image-editor@3.2.2/dist/tui-image-editor.css">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css">
+ 
+<link rel="stylesheet" href="static/bower_components/froala-wysiwyg-editor/css/third_party/image_tui.min.css">
+```
+
 ### HTML Purifier Configs
 
 Froala fields use [HTML Purifier](http://htmlpurifier.org) to ensure that no malicious code makes it into its field values, to prevent XSS attacks and other vulnerabilities.
