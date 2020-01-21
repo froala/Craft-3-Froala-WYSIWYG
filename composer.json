@@ -24,7 +24,7 @@
   },
   "extra": {
     "name": "Froala WYSIWYG Editor",
-    "handle": "froala-editor",
+    "handle": "froala-editor3",
     "hasSettings": true,
     "developer": "Bert Oost",
     "developerUrl": "https://bertoost.com",
