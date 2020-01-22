@@ -4,7 +4,7 @@ The implementation of the Froala Editor (license not included) for Craft CMS (v3
 
 __[Check the Craft CMS v2 version here](https://github.com/froala/Craft-Froala-WYSIWYG/)__
 
-![Entry Field Example](screenshots/editor-on-entry.png "Entry Field Example")
+![Entry Field Example](screenshots/editor-on-entry.jpg "Entry Field Example")
 
 ## Installation
 
