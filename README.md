@@ -63,6 +63,18 @@ For example, if you created a `config/froalaeditor/Simple.json` file with the fo
 
 See the [Froala documentation](https://www.froala.com/wysiwyg-editor/docs/options) for a list of available config options and buttons.
 
+## Third party plugins
+
+```html
+<!-- Include third party plugins -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<script src="../../js/third_party/font_awesome.min.js"></script>
+<script src="../../js/third_party/spell_checker.min.js"></script>
+<script src="../../js/third_party/embedly.min.js"></script>
+<script src="../../js/third_party/image_tui.min.js"></script> 
+<link rel="stylesheet" href="../../css/third_party/image_tui.min.css">
+```
+
 ### HTML Purifier Configs
 
 Froala fields use [HTML Purifier](http://htmlpurifier.org) to ensure that no malicious code makes it into its field values, to prevent XSS attacks and other vulnerabilities.
