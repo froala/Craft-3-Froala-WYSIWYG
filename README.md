@@ -4,7 +4,7 @@ The implementation of the Froala Editor (license not included) for Craft CMS (v3
 
 __[Check the Craft CMS v2 version here](https://github.com/froala/Craft-Froala-WYSIWYG/)__
 
-![Entry Field Example](screenshots/editor-on-entry.png "Entry Field Example")
+![Entry Field Example](screenshots/editor-on-entry.jpg "Entry Field Example")
 
 ## Installation
 
@@ -62,6 +62,18 @@ For example, if you created a `config/froalaeditor/Simple.json` file with the fo
 …then a "Simple" option would become available within the config section on your Froala field’s settings.
 
 See the [Froala documentation](https://www.froala.com/wysiwyg-editor/docs/options) for a list of available config options and buttons.
+
+## Third party plugins
+
+```html
+<!-- Include third party plugins -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<script src="../../js/third_party/font_awesome.min.js"></script>
+<script src="../../js/third_party/spell_checker.min.js"></script>
+<script src="../../js/third_party/embedly.min.js"></script>
+<script src="../../js/third_party/image_tui.min.js"></script> 
+<link rel="stylesheet" href="../../css/third_party/image_tui.min.css">
+```
 
 ### HTML Purifier Configs
 
