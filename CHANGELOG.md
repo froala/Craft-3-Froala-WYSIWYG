@@ -1,5 +1,8 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+- Updated editor to version 4.0.8 along with the plugin version
+## v4.0.8 - 2021-12-21
+
 - Updated editor to version 4.0.7 along with the plugin version
 ## v4.0.7 - 2021-11-23
 
