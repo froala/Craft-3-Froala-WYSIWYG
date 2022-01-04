@@ -1,31 +1,5 @@
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery'], factory);
-    } else if (typeof module === 'object' && module.exports) {
-        // Node/CommonJS
-        module.exports = function (root, jQuery) {
-            if (jQuery === undefined) {
-                // require('jQuery') returns a factory that requires window to
-                // build a jQuery instance, we normalize how we use modules
-                // that require this pattern but the window provided is a noop
-                // if it's defined (how jquery works)
-                if (typeof window !== 'undefined') {
-                    jQuery = require('jquery');
-                }
-                else {
-                    jQuery = require('jquery')(root);
-                }
-            }
-            return factory(jQuery);
-        };
-    } else {
-        // Browser globals
-        factory(window.jQuery);
-    }
-}(function ($) {
-
-    $.extend($.FE.DEFAULTS, {
+(function (FroalaEditor) {
+    FroalaEditor.DEFAULTS = Object.assign(FroalaEditor.DEFAULTS, {
         // general
         craftElementSiteId: false,
         craftAssetElementType: false,
@@ -44,11 +18,14 @@
         // files
         craftFileCriteria: false,
         craftFileSources: [],
-        craftFileStorageKey: false
+        craftFileStorageKey: false,
+
+        linkInsertButtons: ['craftLinkEntry', 'craftLinkAsset']
     });
 
-    $.FE.PLUGINS.craft = function (editor) {
-
+    // Define the plugin.
+    // The editor parameter is the current instance.
+    FroalaEditor.PLUGINS.craft = function (editor) {
         function showEntrySelectModal() {
             var disabledElementIds = [],
                 $popup = editor.popups.get('link.insert'),
@@ -65,7 +42,7 @@
             if (urlValue && urlValue.indexOf('#') !== -1) {
 
                 var hashValue = urlValue.substr(urlValue.indexOf('#'));
-                    hashValue = decodeURIComponent(hashValue);
+                hashValue = decodeURIComponent(hashValue);
 
                 if (hashValue.indexOf(':') !== -1) {
                     disabledElementIds.push(hashValue.split(':')[1]);
@@ -76,8 +53,7 @@
                 editor.opts.craftLinkElementType,
                 editor.opts.craftLinkStorageKey,
                 editor.opts.craftLinkSources,
-                editor.opts.craftLinkCriteria,
-                {
+                editor.opts.craftLinkCriteria, {
                     transforms: editor.opts.craftImageTransforms
                 },
                 function (elements) {
@@ -142,7 +118,7 @@
             if ($currentImage.attr('src').indexOf('#') !== -1) {
 
                 var hashValue = $currentImage.attr('src').substr($currentImage.attr('src').indexOf('#'));
-                    hashValue = decodeURIComponent(hashValue);
+                hashValue = decodeURIComponent(hashValue);
 
                 if (hashValue.indexOf(':') !== -1) {
                     disabledElementIds.push(hashValue.split(':')[1]);
@@ -153,8 +129,7 @@
                 editor.opts.craftAssetElementType,
                 editor.opts.craftImageStorageKey,
                 editor.opts.craftImageSources,
-                editor.opts.craftImageCriteria,
-                {
+                editor.opts.craftImageCriteria, {
                     disabledElementIds: disabledElementIds,
                     transforms: editor.opts.craftImageTransforms
                 },
@@ -205,8 +180,7 @@
                 editor.opts.craftAssetElementType,
                 editor.opts.craftFileStorageKey,
                 editor.opts.craftFileSources,
-                editor.opts.craftFileCriteria,
-                {
+                editor.opts.craftFileCriteria, {
                     disabledElementIds: disabledElementIds
                 },
                 function (elements) {
@@ -251,73 +225,82 @@
             var modal = Craft.createElementSelectorModal(type, modalOpts);
         }
 
+        // The start point for your plugin.
+        function _init() {
+            /*
+            LINK REPLACEMENTS & ADDITIONS
+            */
+
+            FroalaEditor.DefineIcon('craftLinkEntry', {
+                NAME: 'newspaper-o',
+                template: 'font_awesome'
+            });
+            FroalaEditor.RegisterCommand('craftLinkEntry', {
+                title: 'Link to Craft Entry',
+                undo: false,
+                focus: true,
+                refreshOnCallback: false,
+                popup: true,
+                callback: function () {
+                    editor.craft.showEntrySelectModal();
+                }
+            });
+
+            FroalaEditor.DefineIcon('craftLinkAsset', {
+                NAME: 'file-o',
+                template: 'font_awesome'
+            });
+            FroalaEditor.RegisterCommand('craftLinkAsset', {
+                title: 'Link to Craft Asset',
+                focus: true,
+                refreshOnCallback: true,
+                callback: function () {
+                    editor.craft.showFileInsertModal(true);
+                }
+            });
+
+            /*
+                IMAGE REPLACEMENTS & ADDITIONS
+            */
+
+            FroalaEditor.RegisterCommand('insertImage', Object.assign(FroalaEditor.COMMANDS['insertImage'], {
+                callback: function (cmd, val) {
+                    editor.craft.showImageInsertModal();
+                }
+            }));
+
+            FroalaEditor.RegisterCommand('imageReplace', Object.assign(FroalaEditor.COMMANDS['imageReplace'], {
+                callback: function (cmd, val) {
+                    editor.craft.showImageReplaceModal();
+                }
+            }));
+
+            /*
+                FILE REPLACEMENTS & ADDITIONS
+            */
+
+            FroalaEditor.RegisterCommand('insertFile', Object.assign(FroalaEditor.COMMANDS['insertFile'], {
+                callback: function (cmd, val) {
+                    editor.craft.showFileInsertModal();
+                }
+            }));
+
+            /*
+                SHORTCUT REPLACEMENT FOR CRAFT'S SAVE ACTION
+            */
+
+            FroalaEditor.RegisterShortcut(FroalaEditor.KEYCODE.S, null, null, null, false, false);
+        }
+
+        // Expose public methods. If _init is not public then the plugin won't be initialized.
+        // Public method can be accessed through the editor API:
+        // editor.myPlugin.publicMethod();
         return {
+            _init,
             showEntrySelectModal: showEntrySelectModal,
             showImageInsertModal: showImageInsertModal,
             showImageReplaceModal: showImageReplaceModal,
             showFileInsertModal: showFileInsertModal
         }
-    };
-
-    /*
-        LINK REPLACEMENTS & ADDITIONS
-     */
-
-    $.FE.DefineIcon('craftLinkEntry', { NAME: 'newspaper-o' });
-    $.FE.RegisterCommand('craftLinkEntry', {
-        title: 'Link to Craft Entry',
-        undo: false,
-        focus: true,
-        refreshOnCallback: false,
-        popup: true,
-        callback: function () {
-            this.craft.showEntrySelectModal();
-        }
-    });
-
-    $.FE.DefineIcon('craftLinkAsset', { NAME: 'file-o' });
-    $.FE.RegisterCommand('craftLinkAsset', {
-        title: 'Link to Craft Asset',
-        focus: true,
-        refreshOnCallback: true,
-        callback: function () {
-            this.craft.showFileInsertModal(true);
-        }
-    });
-
-    $.extend($.FE.DEFAULTS, {
-        linkInsertButtons: ['craftLinkEntry','craftLinkAsset']
-    });
-
-    /*
-        IMAGE REPLACEMENTS & ADDITIONS
-     */
-
-    $.FE.RegisterCommand('insertImage', $.extend($.FE.COMMANDS['insertImage'], {
-        callback: function (cmd, val) {
-            this.craft.showImageInsertModal();
-        }
-    }));
-
-    $.FE.RegisterCommand('imageReplace', $.extend($.FE.COMMANDS['imageReplace'], {
-        callback: function (cmd, val) {
-            this.craft.showImageReplaceModal();
-        }
-    }));
-
-    /*
-        FILE REPLACEMENTS & ADDITIONS
-     */
-
-    $.FE.RegisterCommand('insertFile', $.extend($.FE.COMMANDS['insertFile'], {
-        callback: function (cmd, val) {
-            this.craft.showFileInsertModal();
-        }
-    }));
-
-    /*
-        SHORTCUT REPLACEMENT FOR CRAFT'S SAVE ACTION
-     */
-
-    $.FroalaEditor.RegisterShortcut($.FE.KEYCODE.S, null, null, null, false, false);
-}));
+    }
+})(FroalaEditor);
