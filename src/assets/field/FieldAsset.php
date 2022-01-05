@@ -3,6 +3,7 @@
 namespace froala\craftfroalawysiwyg\assets\field;
 
 use craft\web\AssetBundle;
+use craft\web\assets\garnish\GarnishAsset;
 use froala\craftfroalawysiwyg\assets\froala\FroalaAsset;
 use froala\craftfroalawysiwyg\Plugin;
 
@@ -19,6 +20,7 @@ class FieldAsset extends AssetBundle
         $this->sourcePath = __DIR__ . '/dist';
         $this->depends = [
             FroalaAsset::class,
+            GarnishAsset::class
         ];
 
         $this->css = [
