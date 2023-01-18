@@ -109,6 +109,14 @@ sed -i "s/UrlName/${DEPLOYMENT_URL}/g" docker-compose.yml
 sed -i "s/ServiceName/${SERVICE_NAME}/g" docker-compose.yml
 sed -i "s/PortNum/${CONTAINER_SERVICE_PORTNO}/g" docker-compose.yml
 sed -i "s/ContainerName/${CONTAINER_NAME}/g" docker-compose.yml
+
+sed -i "s/MysqlContainerName/${DB_CONTAINER_NAME}/g" docker-compose.yml
+sed -i "s/MysqlDatabase/${MYSQL_DATABASE}/g" docker-compose.yml
+sed -i "s/MysqlUser/${MYSQL_USER}/g" docker-compose.yml
+sed -i "s/MysqlPassword/${MYSQL_PASSWORD}/g" docker-compose.yml
+sed -i "s/MysqlTcpPort/${MYSQL_TCP_PORT}/g" docker-compose.yml
+sed -i "s/MysqlRootPassword/${MYSQL_ROOT_PASSWORD}/g" docker-compose.yml
+
 cat docker-compose.yml
 LW_REPO_NAME_LENGTH=`echo ${LW_REPO_NAME} |awk '{print length}'`
 SHORT_SERVICE_NAME="${SERVICE_NAME:0:$LW_REPO_NAME_LENGTH}"
