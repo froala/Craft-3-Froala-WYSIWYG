@@ -27,7 +27,7 @@ RUN docker-php-ext-install zip \
 
 WORKDIR /var/www/html/
 COPY . .
-RUN composer global require froala/craft-froala-wysiwyg
+#RUN composer global require froala/craft-froala-wysiwyg
 RUN composer install
 COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
 
