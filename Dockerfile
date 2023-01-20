@@ -35,7 +35,7 @@ WORKDIR /var/www/html/
 #RUN composer create-project craftcms/craft .
 COPY . .
 #RUN chmod -R 777 /var/www/html/web/
-RUN composer install
+RUN composer install -f
 
 #RUN composer require froala/craft-froala-wysiwyg
 #RUN composer require froala/craft-froala-editor
