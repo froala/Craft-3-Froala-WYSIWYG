@@ -32,7 +32,7 @@ RUN docker-php-ext-install zip \
 
 #RUN mkdir /var/www/html/
  WORKDIR /var/www/html/
- RUN composer create-project craftcms/craft .
+ #RUN composer create-project craftcms/craft .
  COPY . .
  RUN chmod -R 777 /var/www/html/web/
  RUN composer install
