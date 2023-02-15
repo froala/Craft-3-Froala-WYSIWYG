@@ -30,16 +30,16 @@ RUN docker-php-ext-install zip \
     && docker-php-ext-enable imagick
 
 
-#RUN mkdir /var/www/html/
-# WORKDIR /var/www/html/
-# RUN composer create-project craftcms/craft .
-# COPY . .
-# RUN chmod -R 777 /var/www/html/web/
-# RUN composer install
+RUN mkdir /var/www/html/
+ WORKDIR /var/www/html/
+ RUN composer create-project craftcms/craft .
+ COPY . .
+ RUN chmod -R 777 /var/www/html/web/
+ RUN composer install
 
-#RUN composer require froala/craft-froala-wysiwyg
-#RUN composer require froala/craft-froala-editor
-#RUN ./craft install/plugin froala-editor
+RUN composer require froala/craft-froala-wysiwyg
+RUN composer require froala/craft-froala-editor
+RUN ./craft install/plugin froala-editor
 
 RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
@@ -55,6 +55,6 @@ EXPOSE 80
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 RUN chown -R www-data:www-data /var/www/html/
-#RUN chown -R www-data:www-data /var/www/html/craft
+RUN chown -R www-data:www-data /var/www/html/craft
 RUN a2enmod rewrite
 
