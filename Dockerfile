@@ -3,10 +3,10 @@ WORKDIR /var/www/html/
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/
 ENV CRAFT_ALLOW_SUPERUSER 1
-ARG PackageName=froala-editor-QA241122
-ARG PackageVersion=4.0.16
-ARG NexusUser=froala-cid
-ARG NexusPassword=tyl1pOcjsXGBCUDeh_iXsO7WLPK7LnEr3Ehn4JCz
+ARG PackageName
+ARG PackageVersion
+ARG NexusUser
+ARG NexusPassword
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -31,15 +31,16 @@ RUN docker-php-ext-install zip \
 
 
 #RUN mkdir /var/www/html/
- WORKDIR /var/www/html/
- #RUN composer create-project craftcms/craft .
- COPY . .
- RUN chmod -R 777 /var/www/html/web/
- RUN composer install
+WORKDIR /var/www/html/
+#RUN composer create-project craftcms/craft .
+COPY . .
+#RUN chmod -R 777 /var/www/html/web/
+RUN composer config --no-plugins allow-plugins.craftcms/plugin true
+RUN composer install
 
-RUN composer require froala/craft-froala-wysiwyg
-RUN composer require froala/craft-froala-editor
-RUN ./craft install/plugin froala-editor
+#RUN composer require froala/craft-froala-wysiwyg
+#RUN composer require froala/craft-froala-editor
+#RUN ./craft install/plugin froala-editor
 
 RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
