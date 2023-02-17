@@ -30,7 +30,7 @@ RUN docker-php-ext-install zip \
     && docker-php-ext-enable imagick
 
 
-#RUN mkdir /var/www/html/
+RUN mkdir /var/www/html/craft
 WORKDIR /var/www/html/
 #RUN composer create-project craftcms/craft .
 COPY . .
