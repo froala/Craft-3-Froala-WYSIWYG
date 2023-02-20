@@ -91,32 +91,12 @@ function generate_container_name(){
         CONTAINER_NAME="${LW_REPO_NAME}-${AO_IDENTIFIER}-${CT_INDEX}"
         SERVICE_NAME="${LW_REPO_NAME}-${LW_SHORT_TRAVIS_BRANCH}-${CT_INDEX}"
         echo "New index: ${CT_INDEX}"
+		DB_CONTAINER_NAME="${MYSQL_CONTAINER_NAME}-${CT_INDEX}"
+        echo "service name : ${SERVICE_NAME} & container name : ${CONTAINER_NAME}"
     fi
 }
 generate_container_name
 
-SERVICE_NAME="${LW_REPO_NAME}-${LW_SHORT_TRAVIS_BRANCH}" 
-
-generate_container_name ${LW_REPO_NAME} ${LW_SHORT_TRAVIS_BRANCH} ${DEPLOYMENT_SERVER} ${DEPLOYMENT_SERVER} 
-
-CONTAINER_NAME="${LW_REPO_NAME}-${CT_INDEX}"
-DB_CONTAINER_NAME="${MYSQL_CONTAINER_NAME}-${CT_INDEX}"
-echo "service name : ${SERVICE_NAME} & container name : ${CONTAINER_NAME}"
-
-sed -i "s/ImageName/${NEXUS_CR_TOOLS_URL}\/${IMAGE_NAME}/g" docker-compose.yml
-sed -i "s/UrlName/${DEPLOYMENT_URL}/g" docker-compose.yml
-sed -i "s/ServiceName/${SERVICE_NAME}/g" docker-compose.yml
-sed -i "s/PortNum/${CONTAINER_SERVICE_PORTNO}/g" docker-compose.yml
-sed -i "s/ContainerName/${CONTAINER_NAME}/g" docker-compose.yml
-
-sed -i "s/MysqlContainerName/${DB_CONTAINER_NAME}/g" docker-compose.yml
-sed -i "s/MysqlDatabase/${MYSQL_DATABASE}/g" docker-compose.yml
-sed -i "s/MysqlUser/${MYSQL_USER}/g" docker-compose.yml
-sed -i "s/MysqlPassword/${MYSQL_PASSWORD}/g" docker-compose.yml
-sed -i "s/MysqlTcpPort/${MYSQL_TCP_PORT}/g" docker-compose.yml
-sed -i "s/MysqlRootPassword/${MYSQL_ROOT_PASSWORD}/g" docker-compose.yml
-
-cat docker-compose.yml
 # Print useful details.
 echo -e "\n"
 echo "----------------------------------------------------------------------"
@@ -145,6 +125,13 @@ function deploy(){
     sed -i "s/ServiceName/${SERVICE_NAME}/g" docker-compose.yml
     sed -i "s/PortNum/${CONTAINER_SERVICE_PORTNO}/g" docker-compose.yml
     sed -i "s/ContainerName/${CONTAINER_NAME}/g" docker-compose.yml
+
+	sed -i "s/MysqlContainerName/${DB_CONTAINER_NAME}/g" docker-compose.yml
+    sed -i "s/MysqlDatabase/${MYSQL_DATABASE}/g" docker-compose.yml
+    sed -i "s/MysqlUser/${MYSQL_USER}/g" docker-compose.yml
+    sed -i "s/MysqlPassword/${MYSQL_PASSWORD}/g" docker-compose.yml
+    sed -i "s/MysqlTcpPort/${MYSQL_TCP_PORT}/g" docker-compose.yml
+    sed -i "s/MysqlRootPassword/${MYSQL_ROOT_PASSWORD}/g" docker-compose.yml
 
     echo -e "\n"
     echo "Below is the content of docker-compose.yml"
