@@ -35,6 +35,7 @@ WORKDIR /var/www/html/
 #RUN composer create-project craftcms/craft .
 COPY . .
 #RUN chmod -R 777 /var/www/html/web/
+RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer install
 
 #RUN composer require froala/craft-froala-wysiwyg
