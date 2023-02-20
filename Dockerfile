@@ -45,7 +45,7 @@ RUN composer install
 #RUN ./craft install/plugin froala-editor
 
 #RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
-#RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
+RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
 COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
 
 RUN wget --no-check-certificate --user ${NexusUser}  --password ${NexusPassword} https://nexus.tools.froala-infra.com/repository/Froala-npm/${PackageName}/-/${PackageName}-${PackageVersion}.tgz
