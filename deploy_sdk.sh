@@ -155,12 +155,12 @@ function deploy(){
     sleep 60
 
     RET_CODE=$(curl -k -s -o /tmp/notimportant.txt -w "%{http_code}" https://"${DEPLOYMENT_URL}")
-    echo "validation code: $RET_CODE for  https://${DEPLOYMENT_URL}"
+    echo "validation code: $RET_CODE for https://${DEPLOYMENT_URL}/web/admin/install"
     if [ "${RET_CODE}" -ne 200 ]; then 
         echo "Deployment validation failed!!! Please check pipeline logs." 
         exit 1 
     else 
-        echo -e "\n\tService available at URL: https://${DEPLOYMENT_URL}\n"
+        echo -e "\n\tService available at URL: https://${DEPLOYMENT_URL}/web/admin/install\n"
     fi
 }
 
