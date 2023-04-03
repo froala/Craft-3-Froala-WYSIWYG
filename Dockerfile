@@ -51,7 +51,7 @@ COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
 RUN wget --no-check-certificate --user ${NexusUser}  --password ${NexusPassword} https://nexus.tools.froala-infra.com/repository/Froala-npm/${PackageName}/-/${PackageName}-${PackageVersion}.tgz
 RUN tar -xvf ${PackageName}-${PackageVersion}.tgz
 
-RUN cp -a package/. /var/www/html/vendor/froala/wysiwyg-editor/
+RUN cp -a package/* /var/www/html/vendor/froala/wysiwyg-editor/
 RUN rm -rf package ${PackageName}-${PackageVersion}.tgz
 
 RUN chmod -R 777 /var/www/html/config
