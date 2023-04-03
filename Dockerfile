@@ -32,7 +32,7 @@ RUN docker-php-ext-install zip \
 
 RUN mkdir /var/www/html/craft
 WORKDIR /var/www/html/
-#RUN composer create-project craftcms/craft .
+RUN composer create-project craftcms/craft .
 COPY . .
 #RUN chmod -R 777 /var/www/html/web/
 
@@ -55,7 +55,7 @@ RUN cp -a package/* /var/www/html/vendor/froala/wysiwyg-editor/
 RUN rm -rf package ${PackageName}-${PackageVersion}.tgz
 
 RUN chmod -R 777 /var/www/html/config
-#RUN chmod -R 777 /var/www/html/web/cpresources
+RUN chmod -R 777 /var/www/html/web/cpresources
 RUN chmod -R 777 /var/www/html/composer.json
 
 #RUN ./craft plugin/install froala-editor
