@@ -32,7 +32,7 @@ RUN mkdir /var/www/html/craft
 WORKDIR /var/www/html/
 
 COPY . .
-RUN chmod -R 777 /var/www/html/web/
+
 RUN chmod -R 777 /var/www/html/craft
 
 
