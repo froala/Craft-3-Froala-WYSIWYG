@@ -200,7 +200,7 @@ echo "Docker-compose is in : /services/${SERVICE_NAME} "
 #############
 # validate deployment
 #
-sleep 180
+sleep 360
 RET_CODE=`curl -k -s -o /tmp/notimportant.txt -w "%{http_code}" https://${DEPLOYMENT_URL}/web/admin/install`
 echo "validation code: $RET_CODE  for URL https://${DEPLOYMENT_URL}/web/admin/install "
 if [ $RET_CODE -ne 200 ]; then 
