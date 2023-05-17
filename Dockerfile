@@ -52,9 +52,8 @@ RUN cp -a package/* /var/www/html/vendor/froala/wysiwyg-editor/
 RUN rm -rf package ${PackageName}-${PackageVersion}.tgz
 
 RUN chmod -R 777 /var/www/html/config
-RUN chmod -R 777 /var/www/html/web/cpresources
-RUN chmod -R 777 /var/www/html/composer.json
 
+RUN chmod -R 777 /var/www/html/composer.json
 #RUN ./craft plugin/install froala-editor
 
 EXPOSE 80
