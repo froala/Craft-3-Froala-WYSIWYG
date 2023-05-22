@@ -3,6 +3,20 @@
 #
 #  Build & upload docker image to Nexus
 #
+if [ ${TRAVIS_PULL_REQUEST} != "false" ];  then echo "Not publishing a pull request !!!" && exit 0; fi
+
+export BRANCH_NAME=`echo "${TRAVIS_BRANCH}" | tr '[:upper:]' '[:lower:]'`
+case "${BRANCH_NAME}" in
+        dev*) echo "Branch ${TRAVIS_BRANCH} is eligible for CI/CD" ;;
+	       ao-dev*)echo "Branch ${TRAVIS_BRANCH} is eligible for CI/CD"  ;;
+        qa*) echo "Branch ${TRAVIS_BRANCH} is eligible for CI/CD"  ;;
+	       qe*) echo "Branch ${TRAVIS_BRANCH} is eligible for CI/CD"  ;;
+	       rc*) echo "Branch ${TRAVIS_BRANCH} is eligible for CI/CD"  ;;
+	       release-master*) echo "Branch ${TRAVIS_BRANCH} is eligible for CI/CD"  ;;
+        ft*) echo "Branch ${TRAVIS_BRANCH} is eligible for CI" ;;
+        bf*) echo "Branch ${TRAVIS_BRANCH} is eligible for CI" ;;
+        *) echo "Not a valid branch name for CI/CD" && exit -1;;
+esac
 
 echo $TRAVIS_BRANCH
 echo ${DEPLOYMENT_SERVER}

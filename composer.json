@@ -29,5 +29,10 @@
     "developer": "Bert Oost",
     "developerUrl": "https://bertoost.com",
     "documentationUrl": "https://github.com/froala/Craft-3-Froala-WYSIWYG/blob/master/README.md"
+  },
+
+  "config": {
+
+      "platform-check": false
   }
 }
