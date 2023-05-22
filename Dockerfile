@@ -58,7 +58,6 @@ RUN chmod -R 777 /var/www/html/composer.json
 RUN chmod -R 777 /var/www/html/
 RUN chmod -R 777 /var/www/html/craft
 
-#RUN ./craft plugin/install froala-editor
 
 EXPOSE 80
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
