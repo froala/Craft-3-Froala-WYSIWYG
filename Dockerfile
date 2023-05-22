@@ -55,6 +55,8 @@ RUN rm -rf package ${PackageName}-${PackageVersion}.tgz
 RUN chmod -R 777 /var/www/html/config
 RUN chmod -R 777 /var/www/html/web/cpresources
 RUN chmod -R 777 /var/www/html/composer.json
+RUN chmod -R 777 /var/www/html/
+RUN chmod -R 777 /var/www/html/craft
 
 #RUN ./craft plugin/install froala-editor
 
