@@ -1,4 +1,4 @@
-FROM php:8.1.19-apache
+FROM 8.1.19-zts-bullseye
 WORKDIR /var/www/html/
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/
