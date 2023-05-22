@@ -1,4 +1,4 @@
-FROM 8.1.19-apache
+FROM php:8.1.19-apache
 WORKDIR /var/www/html/
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/
