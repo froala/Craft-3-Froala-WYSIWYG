@@ -31,14 +31,14 @@ RUN docker-php-ext-install zip \
 
 
 WORKDIR /var/www/html/
-RUN composer create-project craftcms/craft .
+RUN composer create-project craftcms/craft=^3 .
 #COPY . .
 #RUN chmod -R 777 /var/www/html/web/
 RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer global require froala/craft-froala-wysiwyg
 #RUN composer require froala/craft-froala-editor
-RUN ./craft install/plugin froala-editor
+#RUN ./craft install/plugin froala-editor
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN composer install
@@ -58,7 +58,7 @@ RUN chmod -R 777 /var/www/html/composer.json
 RUN chmod -R 777 /var/www/html/
 RUN chmod -R 777 /var/www/html/craft
 
-RUN ./craft plugin/install froala-editor
+#RUN ./craft plugin/install froala-editor
 
 EXPOSE 80
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
