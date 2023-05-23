@@ -25,7 +25,7 @@ services:
       caddy_0.reverse_proxy: "{{upstreams PortNum}}"
       caddy_0.tls.ca: https://acme-staging-v02.api.letsencrypt.org/directory
   dbcraft:
-    image: 'mysql:5.7'
+    image: 'mysql:8.0'
     pull_policy: always
     restart: unless-stopped
     container_name: MysqlContainerName
