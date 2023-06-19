@@ -1,7 +1,7 @@
 FROM php:8.1.19-apache
 WORKDIR /var/www/html/
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html/
+ENV APACHE_DOCUMENT_ROOT /var/www/html/web
 ENV CRAFT_ALLOW_SUPERUSER 1
 ARG PackageName
 ARG PackageVersion
@@ -18,7 +18,7 @@ RUN apt-get update \
 
 #RUN apt-get update && apt-get install -y libmagickwand-dev libicu-dev zlib1g-dev libicu-dev g++ --no-install-recommends && rm -rf /var/lib/apt/lists/*
 RUN pecl install imagick-beta
-#RUN docker-php-ext-enable imagick
+RUN docker-php-ext-enable imagick
 
 RUN docker-php-ext-install zip \
     && docker-php-ext-install pcntl \
@@ -31,9 +31,9 @@ RUN docker-php-ext-install zip \
 
 
 WORKDIR /var/www/html/
-RUN composer create-project craftcms/craft .
+RUN composer create-project craftcms/craft=^1 .
 #COPY . .
-#RUN chmod -R 777 /var/www/html/web/
+RUN chmod -R 777 /var/www/html/web/
 RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer global require froala/craft-froala-wysiwyg
