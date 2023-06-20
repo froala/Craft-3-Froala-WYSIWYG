@@ -59,8 +59,6 @@ RUN chmod -R 777 /var/www/html/composer.json
 RUN chmod -R 777 /var/www/html/
 RUN chmod -R 777 /var/www/html/craft
 
-COPY /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
-RUN echo "extension=imagick.so" >> /usr/local/etc/php/php.ini
 #RUN ./craft plugin/install froala-editor
 
 EXPOSE 80
