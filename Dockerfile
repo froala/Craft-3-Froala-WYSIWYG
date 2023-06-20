@@ -1,7 +1,7 @@
 FROM php:8.1.19-apache
 WORKDIR /var/www/html/
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html/web
+ENV APACHE_DOCUMENT_ROOT /var/www/html/
 ENV CRAFT_ALLOW_SUPERUSER 1
 ARG PackageName
 ARG PackageVersion
@@ -66,3 +66,4 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 RUN chown -R www-data:www-data /var/www/html/
 RUN chown -R www-data:www-data /var/www/html/craft
 RUN a2enmod rewrite
+RUN apachectl configtest
