@@ -11,7 +11,7 @@ ARG NexusPassword
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN apt-get update \
-    && apt-get install apt-utils \
+    && apt install apt-utils \
     && apt-get install -y git zip unzip zlib1g-dev libzip-dev wget netstat-nat net-tools libmagickwand-dev libicu-dev zlib1g-dev libicu-dev g++ --no-install-recommends \
     && apt-get -y autoremove \
     && apt-get clean \
@@ -19,8 +19,6 @@ RUN apt-get update \
 
 #RUN apt-get update && apt-get install -y libmagickwand-dev libicu-dev zlib1g-dev libicu-dev g++ --no-install-recommends && rm -rf /var/lib/apt/lists/*
 RUN pecl install imagick-beta
-COPY /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
-RUN echo "extension=imagick.so" >> /usr/local/etc/php/php.ini
 RUN docker-php-ext-enable imagick
 
 RUN docker-php-ext-install zip \
@@ -61,6 +59,8 @@ RUN chmod -R 777 /var/www/html/composer.json
 RUN chmod -R 777 /var/www/html/
 RUN chmod -R 777 /var/www/html/craft
 
+COPY /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
+RUN echo "extension=imagick.so" >> /usr/local/etc/php/php.ini
 #RUN ./craft plugin/install froala-editor
 
 EXPOSE 80
