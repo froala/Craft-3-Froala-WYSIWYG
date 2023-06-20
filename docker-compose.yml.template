@@ -2,6 +2,8 @@ version: '3.7'
 
 services:
   ServiceName:
+    depends_on:
+      - dbcraft
     restart: unless-stopped
     image: ImageName
     container_name: ContainerName
