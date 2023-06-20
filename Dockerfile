@@ -41,7 +41,7 @@ RUN composer global require froala/craft-froala-wysiwyg
 #RUN ./craft install/plugin froala-editor
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
-RUN composer install
+#RUN composer install
 #RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 #RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
 COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
