@@ -45,4 +45,3 @@ networks:
     external: true
   db_network_craft:
     external: false
-    name: db_network_craft
