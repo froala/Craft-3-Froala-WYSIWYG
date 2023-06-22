@@ -1,4 +1,4 @@
-FROM php:8.1.19-apache
+FROM php:7.4-apache
 WORKDIR /var/www/html/
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/
@@ -11,7 +11,6 @@ ARG NexusPassword
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN apt-get update \
-    && apt install apt-utils \
     && apt-get install -y git zip unzip zlib1g-dev libzip-dev wget netstat-nat net-tools libmagickwand-dev libicu-dev zlib1g-dev libicu-dev g++ --no-install-recommends \
     && apt-get -y autoremove \
     && apt-get clean \
@@ -19,7 +18,7 @@ RUN apt-get update \
 
 #RUN apt-get update && apt-get install -y libmagickwand-dev libicu-dev zlib1g-dev libicu-dev g++ --no-install-recommends && rm -rf /var/lib/apt/lists/*
 RUN pecl install imagick-beta
-RUN docker-php-ext-enable imagick
+#RUN docker-php-ext-enable imagick
 
 RUN docker-php-ext-install zip \
     && docker-php-ext-install pcntl \
@@ -31,26 +30,18 @@ RUN docker-php-ext-install zip \
     && docker-php-ext-enable imagick
 
 
+#RUN mkdir /var/www/html/
 WORKDIR /var/www/html/
 RUN composer create-project craftcms/craft=^1 .
 COPY . .
-RUN chmod -R 777 /var/www/html/web/
-RUN chmod -R 777 /var/www/html/
-# RUN mv craft crafts
-# RUN mkdir -p /var/www/html/craft/plugins/froalaeditor
-RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
-RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
-RUN composer config --no-plugins allow-plugins.composer/installers true
-RUN composer global require froala/craft-froala-wysiwyg
-# RUN composer require froala/craft-froala-editor
-# RUN ./craft install/plugin froala-editor
-RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
-RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
-# RUN composer require froala/craft-froala-editor
-# RUN ./craft install/plugin froala-editor
-RUN composer install 
+#RUN chmod -R 777 /var/www/html/web/
 
-# RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
+RUN composer global require froala/craft-froala-wysiwyg
+#RUN composer require froala/craft-froala-editor
+#RUN ./craft install/plugin froala-editor
+
+RUN composer install
+#RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 #RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
 COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
 
@@ -63,8 +54,6 @@ RUN rm -rf package ${PackageName}-${PackageVersion}.tgz
 RUN chmod -R 777 /var/www/html/config
 RUN chmod -R 777 /var/www/html/web/cpresources
 RUN chmod -R 777 /var/www/html/composer.json
-# RUN chmod -R 777 /var/www/html/
-RUN chmod -R 777 /var/www/html/craft
 
 #RUN ./craft plugin/install froala-editor
 
@@ -74,5 +63,3 @@ RUN sed -ri -e "s|/var/www/|${APACHE_DOCUMENT_ROOT}|g" /etc/apache2/apache2.conf
 RUN chown -R www-data:www-data /var/www/html/
 RUN chown -R www-data:www-data /var/www/html/craft
 RUN a2enmod rewrite
-RUN service apache2 restart 
-RUN apachectl configtest
