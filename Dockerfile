@@ -36,15 +36,18 @@ RUN composer create-project craftcms/craft=^1 .
 #COPY . .
 RUN chmod -R 777 /var/www/html/web/
 RUN chmod -R 777 /var/www/html/
+RUN mv craft crafts
 RUN mkdir -p /var/www/html/craft/plugins/froalaeditor
 RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer global require froala/craft-froala-wysiwyg
-RUN composer require froala/craft-froala-editor
-RUN ./craft install/plugin froala-editor
+# RUN composer require froala/craft-froala-editor
+# RUN ./crafts install/plugin froala-editor
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
+RUN composer require froala/craft-froala-editor
+RUN ./crafts install/plugin froala-editor
 #RUN composer install
 #RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 #RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
@@ -60,9 +63,9 @@ RUN chmod -R 777 /var/www/html/config
 RUN chmod -R 777 /var/www/html/web/cpresources
 RUN chmod -R 777 /var/www/html/composer.json
 # RUN chmod -R 777 /var/www/html/
-# RUN chmod -R 777 /var/www/html/craft
+RUN chmod -R 777 /var/www/html/craft
 
-#RUN ./craft plugin/install froala-editor
+#RUN ./crafts plugin/install froala-editor
 
 EXPOSE 80
 RUN sed -ri -e "s|/var/www/html|${APACHE_DOCUMENT_ROOT}|g" /etc/apache2/sites-available/*.conf
