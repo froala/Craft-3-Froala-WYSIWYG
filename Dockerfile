@@ -39,8 +39,8 @@ RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer 
 
 RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
-
-#RUN composer config --no-plugins allow-plugins.composer/installers true
+RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
+RUN composer config --no-plugins allow-plugins.composer/installers true
 
 RUN composer global require froala/craft-froala-wysiwyg
 #RUN composer require froala/craft-froala-editor
