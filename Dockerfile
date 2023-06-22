@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.1.19-apache
 WORKDIR /var/www/html/
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/
@@ -35,6 +35,11 @@ WORKDIR /var/www/html/
 RUN composer create-project craftcms/craft=^1 .
 COPY . .
 #RUN chmod -R 777 /var/www/html/web/
+RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
+
+RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
+
+RUN composer config --no-plugins allow-plugins.composer/installers true
 
 RUN composer global require froala/craft-froala-wysiwyg
 #RUN composer require froala/craft-froala-editor
