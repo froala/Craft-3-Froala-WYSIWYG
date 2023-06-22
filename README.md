@@ -26,7 +26,7 @@ cd /path/to/my-project
 composer require froala/craft-froala-wysiwyg
 
 # tell Craft to install the plugin
-./crafts install/plugin froala-editor
+./craft install/plugin froala-editor
 ```
 
 ## Known issue (help wanted!)

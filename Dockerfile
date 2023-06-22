@@ -43,13 +43,13 @@ RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer global require froala/craft-froala-wysiwyg
 # RUN composer require froala/craft-froala-editor
-# RUN ./crafts install/plugin froala-editor
+# RUN ./craft install/plugin froala-editor
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 # RUN composer require froala/craft-froala-editor
-# RUN ./crafts install/plugin froala-editor
+# RUN ./craft install/plugin froala-editor
 RUN composer install
-#RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
+RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 #RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
 COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
 
@@ -65,7 +65,7 @@ RUN chmod -R 777 /var/www/html/composer.json
 # RUN chmod -R 777 /var/www/html/
 RUN chmod -R 777 /var/www/html/craft
 
-#RUN ./crafts plugin/install froala-editor
+#RUN ./craft plugin/install froala-editor
 
 EXPOSE 80
 RUN sed -ri -e "s|/var/www/html|${APACHE_DOCUMENT_ROOT}|g" /etc/apache2/sites-available/*.conf
