@@ -188,7 +188,7 @@ if [ "${EXISTING_DEPLOYMENTS_NR}" -ge "${MAX_DEPLOYMENTS_NR}" ]; then
       if ! ssh -o "StrictHostKeyChecking no" -i  /tmp/sshkey.pem "${SSH_USER}"@"${DEPLOYMENT_SERVER}" "sudo docker ps -a --format '{{.Names}}' | grep -i '${OLDEST_CONTAINER}' | xargs -r sudo docker rm -f"; then
           echo "Failed to remove the ${OLDEST_CONTAINER} container"
       else
-          echo "Successfully removed the ${OLDEST_CONTAINER} container."
+          echo "Successfully  removed the ${OLDEST_CONTAINER} container."
       fi
     fi
     
