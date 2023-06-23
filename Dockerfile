@@ -48,7 +48,7 @@ RUN composer config --no-plugins allow-plugins.composer/installers true
 #RUN composer global require froala/craft-froala-wysiwyg
 RUN composer require froala/craft-froala-editor
 #RUN ./craft install/plugin froala-editor
-RUN composer update
+# RUN composer update
 
 RUN composer install
 #RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
