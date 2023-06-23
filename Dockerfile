@@ -34,7 +34,7 @@ RUN docker-php-ext-install zip \
 WORKDIR /var/www/html/
 RUN composer create-project craftcms/craft=^1 .
 COPY . .
-#RUN chmod -R 777 /var/www/html/web/
+RUN chmod -R 777 /var/www/html/web/
 RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
 
 RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
