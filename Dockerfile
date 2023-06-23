@@ -46,6 +46,7 @@ RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN rm -rf ./vendor
 RUN rm -rf ./composer.lock
 WORKDIR /var/www/html/web/
+RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer require froala/craft-froala-editor
 
 RUN cat composer.json
