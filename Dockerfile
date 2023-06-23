@@ -52,7 +52,7 @@ RUN cat composer.json
 # RUN composer update
 
 # RUN composer install
-#RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
+RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 #RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
 # COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
 
@@ -65,6 +65,7 @@ RUN cat composer.json
 RUN chmod -R 777 /var/www/html/config
 RUN chmod -R 777 /var/www/html/web/cpresources
 RUN chmod -R 777 /var/www/html/composer.json
+RUN chmod -R 777 /var/www/html/craft/
 RUN composer require froala/craft-froala-editor
 RUN cat composer.json
 RUN composer install
