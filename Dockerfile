@@ -35,26 +35,23 @@ WORKDIR /var/www/html/
 RUN composer create-project craftcms/craft=^1 .
 # COPY . .
 RUN chmod -R 777 /var/www/html/
-RUN mkdir -p /var/www/html/app
-RUN cd /app
-COPY . .
-RUN cd /var/www/html/
-RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
-
-RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
+# RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
+RUN echo composer.json
+# RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
 # RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 # RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 # RUN composer config --no-plugins allow-plugins.composer/installers true
 # WORKDIR /var/www/html/web/
-RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
-RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
-RUN composer config --no-plugins allow-plugins.composer/installers true
+# RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
+# RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
+# RUN composer config --no-plugins allow-plugins.composer/installers true
 #RUN composer global require froala/craft-froala-wysiwyg
-RUN composer require froala/craft-froala-editor
+
+# RUN composer require froala/craft-froala-editor
 #RUN ./craft install/plugin froala-editor
 # RUN composer update
 
-RUN composer install
+# RUN composer install
 #RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 #RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
 # COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
@@ -68,6 +65,10 @@ RUN composer install
 RUN chmod -R 777 /var/www/html/config
 RUN chmod -R 777 /var/www/html/web/cpresources
 RUN chmod -R 777 /var/www/html/composer.json
+RUN composer require froala/craft-froala-editor
+RUN echo composer.json
+RUN composer install
+
 
 #RUN ./craft plugin/install froala-editor
 
