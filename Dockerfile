@@ -32,6 +32,7 @@ WORKDIR /var/www/html/
 RUN composer create-project craftcms/craft=^1 .
 
 RUN chmod -R 777 /var/www/html/
+RUN chmod -R 777 /var/www/html/web/
 
 RUN cat composer.json
 
@@ -44,7 +45,7 @@ RUN composer config --no-plugins allow-plugins.composer/installers true
 # Add commands to delete the vendor folder and composer.lock file
 RUN rm -rf ./vendor
 RUN rm -rf ./composer.lock
-
+RUN cd ./web
 RUN composer require froala/craft-froala-editor
 
 RUN cat composer.json
