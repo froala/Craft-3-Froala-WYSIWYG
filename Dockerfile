@@ -33,14 +33,14 @@ RUN docker-php-ext-install zip \
 #RUN mkdir /var/www/html/
 WORKDIR /var/www/html/
 RUN composer create-project craftcms/craft=^1 .
-COPY . .
+#COPY . .
 RUN chmod -R 777 /var/www/html/web/
-RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
+# RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
 
-RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
-RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
-RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
-RUN composer config --no-plugins allow-plugins.composer/installers true
+# RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
+# RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
+# RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
+# RUN composer config --no-plugins allow-plugins.composer/installers true
 
 RUN composer global require froala/craft-froala-wysiwyg
 #RUN composer require froala/craft-froala-editor
@@ -50,13 +50,13 @@ RUN composer update
 RUN composer install
 #RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 #RUN mkdir -p /var/www/html/vendor/froala/wysiwyg-editor
-COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
+# COPY . /var/www/html/vendor/froala/craft-froala-wysiwyg
 
-RUN wget --no-check-certificate --user ${NexusUser}  --password ${NexusPassword} https://nexus.tools.froala-infra.com/repository/Froala-npm/${PackageName}/-/${PackageName}-${PackageVersion}.tgz
-RUN tar -xvf ${PackageName}-${PackageVersion}.tgz
+# RUN wget --no-check-certificate --user ${NexusUser}  --password ${NexusPassword} https://nexus.tools.froala-infra.com/repository/Froala-npm/${PackageName}/-/${PackageName}-${PackageVersion}.tgz
+# RUN tar -xvf ${PackageName}-${PackageVersion}.tgz
 
-RUN cp -a package/. /var/www/html/vendor/froala/wysiwyg-editor/
-RUN rm -rf package ${PackageName}-${PackageVersion}.tgz
+# RUN cp -a package/. /var/www/html/vendor/froala/wysiwyg-editor/
+# RUN rm -rf package ${PackageName}-${PackageVersion}.tgz
 
 RUN chmod -R 777 /var/www/html/config
 RUN chmod -R 777 /var/www/html/web/cpresources
