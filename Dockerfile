@@ -36,7 +36,7 @@ RUN composer create-project craftcms/craft=^1 .
 # COPY . .
 RUN chmod -R 777 /var/www/html/
 # RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
-RUN echo composer.json
+RUN cat composer.json
 # RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
 # RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 # RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
@@ -66,7 +66,7 @@ RUN chmod -R 777 /var/www/html/config
 RUN chmod -R 777 /var/www/html/web/cpresources
 RUN chmod -R 777 /var/www/html/composer.json
 RUN composer require froala/craft-froala-editor
-RUN echo composer.json
+RUN cat composer.json
 RUN composer install
 
 
