@@ -55,7 +55,9 @@ RUN composer require froala/craft-froala-editor
 RUN rm -rf ./vendor
 RUN rm -rf ./composer.lock
 
+RUN mv composer.json /var/www/html/composer.json
 RUN cat composer.json
+
 
 RUN composer install
 
