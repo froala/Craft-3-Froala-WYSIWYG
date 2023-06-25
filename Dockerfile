@@ -40,7 +40,7 @@ RUN chmod -R 777 /var/www/html/config
 RUN chmod -R 777 /var/www/html/web/cpresources
 RUN chmod -R 777 /var/www/html/composer.json
 
-RUN composer config --no-plugins allow-plugins.composer/installers true
+# RUN composer config --no-plugins allow-plugins.composer/installers true
 
 # Add commands to delete the vendor folder and composer.lock file
 # RUN rm -rf ./vendor
