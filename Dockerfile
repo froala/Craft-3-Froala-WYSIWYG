@@ -45,8 +45,9 @@ RUN composer config --no-plugins allow-plugins.composer/installers true
 # Add commands to delete the vendor folder and composer.lock file
 RUN rm -rf ./vendor
 RUN rm -rf ./composer.lock
-# COPY . ./web 
-# WORKDIR /var/www/html/web/
+COPY . ./web 
+WORKDIR /var/www/html/web/
+RUN mk
 RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
