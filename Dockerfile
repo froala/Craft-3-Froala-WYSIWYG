@@ -45,8 +45,8 @@ RUN composer config --no-plugins allow-plugins.composer/installers true
 # Add commands to delete the vendor folder and composer.lock file
 RUN rm -rf ./vendor
 RUN rm -rf ./composer.lock
-# RUN mv ./composer.json ./web/
-# WORKDIR /var/www/html/web/
+COPY . ./web 
+WORKDIR /var/www/html/web/
 RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer update
 RUN composer require froala/craft-froala-editor
