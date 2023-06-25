@@ -49,6 +49,7 @@ COPY . ./web
 WORKDIR /var/www/html/web/
 RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
+RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN composer update
 RUN composer require froala/craft-froala-editor
 
