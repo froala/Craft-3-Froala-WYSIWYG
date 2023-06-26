@@ -51,15 +51,16 @@ RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN composer update
+RUN composer install
 RUN composer require froala/craft-froala-editor
-RUN rm -rf ./vendor
-RUN rm -rf ./composer.lock
+# RUN rm -rf ./vendor
+# RUN rm -rf ./composer.lock
 
 RUN mv composer.json /var/www/html/composer.json
-RUN cat composer.json
+# RUN cat composer.json
 
 
-RUN composer install
+# RUN composer install
 
 EXPOSE 80
 RUN sed -ri -e "s|/var/www/html|${APACHE_DOCUMENT_ROOT}|g" /etc/apache2/sites-available/*.conf
