@@ -71,8 +71,8 @@ RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 
 
-# RUN composer require froala/craft-froala-wysiwyg
-RUN composer require froala/wysiwyg-editor
+RUN composer require froala/craft-froala-wysiwyg
+# RUN composer require froala/wysiwyg-editor
 RUN cat composer.json
 
 RUN composer install
