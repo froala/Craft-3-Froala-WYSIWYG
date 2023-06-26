@@ -45,7 +45,7 @@ RUN chmod -R 777 /var/www/html/composer.json
 # Add commands to delete the vendor folder and composer.lock file
 # RUN rm -rf ./vendor
 # RUN rm -rf ./composer.lock
-COPY . ./web 
+# COPY . ./web 
 WORKDIR /var/www/html/web/
 RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
