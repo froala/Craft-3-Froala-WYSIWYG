@@ -66,9 +66,9 @@ RUN chmod -R 777 /var/www/html/web/cpresources
 RUN chmod -R 777 /var/www/html/composer.json
 # RUN chmod -R 777 /var/www/html/craft/
 
-RUN composer config --no-plugins allow-plugins.composer/installers true
+# RUN composer config --no-plugins allow-plugins.composer/installers true
 
-RUN composer require froala/craft-froala-editor
+RUN composer require froala/craft-froala-wysiwyg
 
 RUN cat composer.json
 
