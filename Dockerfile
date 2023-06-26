@@ -1,7 +1,7 @@
 FROM php:7.4-apache
 WORKDIR /var/www/html/
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html/
+ENV APACHE_DOCUMENT_ROOT /var/www/html/web/
 ENV CRAFT_ALLOW_SUPERUSER 1
 ARG PackageName
 ARG PackageVersion
@@ -33,7 +33,7 @@ RUN docker-php-ext-install zip \
 #RUN mkdir /var/www/html/
 WORKDIR /var/www/html/
 RUN composer create-project craftcms/craft=^1 .
-# COPY . .
+COPY . .
 RUN chmod -R 777 /var/www/html/
 # RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN cat composer.json
@@ -61,9 +61,7 @@ RUN cat composer.json
 # RUN cp -a package/. /var/www/html/vendor/froala/wysiwyg-editor/
 # RUN rm -rf package ${PackageName}-${PackageVersion}.tgz
 
-RUN chmod -R 777 /var/www/html/config
-RUN chmod -R 777 /var/www/html/web/cpresources
-RUN chmod -R 777 /var/www/html/composer.json
+
 # RUN chmod -R 777 /var/www/html/craft/
 
 RUN composer config --no-plugins allow-plugins.composer/installers true
@@ -86,7 +84,9 @@ RUN tar -xvf ${PackageName}-${PackageVersion}.tgz
 RUN cp -a package/. /var/www/html/vendor/froala/wysiwyg-editor/
 RUN rm -rf package ${PackageName}-${PackageVersion}.tgz
 
-
+RUN chmod -R 777 /var/www/html/config
+RUN chmod -R 777 /var/www/html/web/cpresources
+RUN chmod -R 777 /var/www/html/composer.json
 #RUN ./craft plugin/install froala-editor
 
 EXPOSE 80
