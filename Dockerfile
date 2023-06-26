@@ -67,15 +67,15 @@ RUN cat composer.json
 RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
-
-RUN composer update
+RUN rm -rf ./composer.lock \
+    && rm -rf ./vendor
+# RUN composer update
 RUN composer clear-cache
 RUN composer require froala/craft-froala-wysiwyg
 # RUN composer require froala/wysiwyg-editor
 RUN cat composer.json
 
-RUN rm -rf ./composer.lock \
-    && rm -rf ./vendor
+
 
 
 RUN composer install
