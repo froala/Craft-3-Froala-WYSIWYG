@@ -46,13 +46,14 @@ RUN chmod -R 777 /var/www/html/composer.json
 # RUN rm -rf ./vendor
 # RUN rm -rf ./composer.lock
 # COPY . ./web 
+COPY ./composer.json ./web/
 WORKDIR /var/www/html/web/
 RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN composer update
 RUN composer install
-RUN composer require froala/craft-froala-editor
+RUN composer require froala/craft-froala-editor:^4.0.17
 # RUN rm -rf ./vendor
 # RUN rm -rf ./composer.lock
 
