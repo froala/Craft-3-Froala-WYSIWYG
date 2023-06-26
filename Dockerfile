@@ -33,7 +33,7 @@ RUN docker-php-ext-install zip \
 #RUN mkdir /var/www/html/
 WORKDIR /var/www/html/
 RUN composer create-project craftcms/craft=^1 .
-COPY . .
+# COPY . .
 RUN chmod -R 777 /var/www/html/
 # RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN cat composer.json
