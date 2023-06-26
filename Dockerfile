@@ -71,7 +71,7 @@ RUN rm -rf ./composer.lock \
     && rm -rf ./vendor
 # RUN composer update
 RUN composer clear-cache
-RUN composer require froala/craft-froala-wysiwyg
+RUN composer global require froala/craft-froala-wysiwyg
 # RUN composer require froala/wysiwyg-editor
 RUN cat composer.json
 
