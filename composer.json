@@ -1,5 +1,5 @@
 {
-  "name": "froala/craft-froala-wysiwyg",
+  "name": "froala/wysiwyg-editor",
   "description": "Craft 3 CMS plugin for Froala WYSIWYG HTML Rich Text Editor.",
   "type": "craft-plugin",
   "version": "4.0.17",
