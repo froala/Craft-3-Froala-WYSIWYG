@@ -1,7 +1,7 @@
 FROM php:7.4-apache
 WORKDIR /var/www/html/
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html/web/
+ENV APACHE_DOCUMENT_ROOT /var/www/html/
 ENV CRAFT_ALLOW_SUPERUSER 1
 ARG PackageName
 ARG PackageVersion
@@ -69,9 +69,14 @@ RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 
 RUN composer update
+RUN composer clear-cache
 RUN composer require froala/craft-froala-wysiwyg
 # RUN composer require froala/wysiwyg-editor
 RUN cat composer.json
+
+RUN rm -rf ./composer.lock \
+    && rm -rf ./vendor
+
 
 RUN composer install
 RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
