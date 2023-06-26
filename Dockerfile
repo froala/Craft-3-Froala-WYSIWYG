@@ -43,11 +43,11 @@ RUN chmod -R 777 /var/www/html/composer.json
 # RUN composer config --no-plugins allow-plugins.composer/installers true
 
 # Add commands to delete the vendor folder and composer.lock file
-# RUN rm -rf ./vendor
-# RUN rm -rf ./composer.lock
+RUN rm -rf ./vendor
+RUN rm -rf ./composer.lock
 # COPY . ./web 
-COPY ./composer.json ./web/
-WORKDIR /var/www/html/web/
+# COPY ./composer.json ./web/
+# WORKDIR /var/www/html/web/
 RUN composer config --no-plugins allow-plugins.composer/installers true
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
@@ -58,7 +58,7 @@ RUN composer require froala/craft-froala-editor:^4.0.17
 # RUN rm -rf ./composer.lock
 
 RUN mv composer.json /var/www/html/composer.json
-# RUN cat composer.json
+RUN cat composer.json
 
 
 # RUN composer install
