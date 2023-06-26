@@ -1,6 +1,6 @@
 <?php
 
-namespace froala/craft-froala-wysiwyg;
+namespace froala\craftfroalawysiwyg;
 
 use Craft;
 use craft\helpers\FileHelper;
