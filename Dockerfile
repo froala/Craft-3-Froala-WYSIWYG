@@ -32,16 +32,17 @@ RUN docker-php-ext-install zip \
 
 #RUN mkdir /var/www/html/
 WORKDIR /var/www/html/
-RUN composer create-project craftcms/craft=^1 .
-COPY . .
+# RUN composer create-project craftcms/craft=^1 .
+COPY composer.json composer.lock  ./
 RUN chmod -R 777 /var/www/html/
+RUN composer install
 
 
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/web/cpresources
 RUN chmod -R 775 /var/www/html/storage /var/www/html/web/cpresources
 
-RUN sed -i '/App::run/a \\\n\t\tdefine("YII_DEBUG", true);\n\t\tdefine("YII_ENV", "dev");' /var/www/html/web/index.php
+# RUN sed -i '/App::run/a \\\n\t\tdefine("YII_DEBUG", true);\n\t\tdefine("YII_ENV", "dev");' /var/www/html/web/index.php
 
 
 
@@ -81,8 +82,8 @@ RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer 
 RUN composer config --no-plugins allow-plugins.yiisoft/yii2-composer true
 RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN composer config --no-plugins allow-plugins.composer/installers true
-RUN rm -rf ./composer.lock \
-    && rm -rf ./vendor
+# RUN rm -rf ./composer.lock \
+#     && rm -rf ./vendor
 # RUN composer update
 RUN composer clear-cache
 RUN composer global require froala/craft-froala-wysiwyg
