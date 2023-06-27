@@ -66,4 +66,4 @@ RUN sed -ri -e "s|/var/www/|${APACHE_DOCUMENT_ROOT}|g" /etc/apache2/apache2.conf
 RUN chown -R www-data:www-data /var/www/html/
 RUN chown -R www-data:www-data /var/www/html/craft
 RUN a2enmod rewrite
-# CMD ./craft plugin/install froala-editor
+CMD ./craft plugin/install froala-editor

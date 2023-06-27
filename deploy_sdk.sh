@@ -192,12 +192,12 @@ if [ "${EXISTING_DEPLOYMENTS_NR}" -ge "${MAX_DEPLOYMENTS_NR}" ]; then
           echo "Successfully  removed the ${OLDEST_CONTAINER} container."
       fi
     fi
-    if ! ssh -o "StrictHostKeyChecking no" -i  /tmp/sshkey.pem "${SSH_USER}"@"${DEPLOYMENT_SERVER}" "docker images --filter "dangling=true" |grep -i '${IMG_NAME}'| awk -F " " '{print$3}' | xargs -r docker rmi" ; then
+    if ! ssh -o "StrictHostKeyChecking no" -i  /tmp/sshkey.pem "${SSH_USER}"@"${DEPLOYMENT_SERVER}" "sudo docker images --filter "dangling=true" |grep -i '${IMG_NAME}'| awk -F " " '{print$3}' | xargs -r sudo docker rmi -f " ; then
         echo "Failed to remove the old image"
     else 
         echo "Successfully removed the old image" 
     fi
-    if ! ssh -o "StrictHostKeyChecking no" -i  /tmp/sshkey.pem "${SSH_USER}"@"${DEPLOYMENT_SERVER}" "docker network ls | grep -i '${NETWORK_NAME}' |awk -F " " '{print$1}' | xargs -r docker network rm" ; then
+    if ! ssh -o "StrictHostKeyChecking no" -i  /tmp/sshkey.pem "${SSH_USER}"@"${DEPLOYMENT_SERVER}" "sudo docker network ls | grep -i '${NETWORK_NAME}' |awk -F " " '{print$1}' | xargs -r sudo docker network rm -f" ; then
         echo "failed to remove the network "
     else
         echo "Successfully remove network ${NETWORK_NAME} . "
