@@ -153,14 +153,14 @@ RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 
 RUN composer config --no-plugins allow-plugins.composer/installers true
 
-RUN rm -rf ./composer.lock \
-    && rm -rf ./vendor
+# RUN rm -rf ./composer.lock \
+#     && rm -rf ./vendor
 
 RUN composer update
 
 RUN composer clear-cache
 
-RUN composer global require froala/craft-froala-wysiwyg:4.0.17
+# RUN composer global require froala/craft-froala-wysiwyg:4.0.17      ---  --
 
 # RUN composer require froala/wysiwyg-editor
 
@@ -172,7 +172,7 @@ RUN cat composer.json
 
 
 
-# RUN composer install
+RUN composer install
 
 RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 
