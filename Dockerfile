@@ -6,33 +6,21 @@ WORKDIR /var/www/html/
 
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/
-
 ENV CRAFT_ALLOW_SUPERUSER 1
-
 ARG PackageName
-
 ARG PackageVersion
-
 ARG NexusUser
-
 ARG NexusPassword
-
-
 
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 
 
-
 RUN apt-get update \
-
     && apt-get install -y git zip unzip zlib1g-dev libzip-dev wget netstat-nat net-tools libmagickwand-dev libicu-dev zlib1g-dev libicu-dev g++ --no-install-recommends \
-
     && apt-get -y autoremove \
-
     && apt-get clean \
-
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
@@ -48,19 +36,12 @@ RUN pecl install imagick-beta
 
 
 RUN docker-php-ext-install zip \
-
     && docker-php-ext-install pcntl \
-
     && docker-php-ext-install bcmath \
-
     && docker-php-ext-configure intl \
-
     && docker-php-ext-install intl \
-
     && docker-php-ext-install mysqli pdo pdo_mysql \
-
     && docker-php-ext-enable pdo_mysql \
-
     && docker-php-ext-enable imagick
 
 
@@ -173,10 +154,9 @@ RUN composer config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN composer config --no-plugins allow-plugins.composer/installers true
 
 RUN rm -rf ./composer.lock \
-
     && rm -rf ./vendor
 
-# RUN composer update
+RUN composer update
 
 RUN composer clear-cache
 
