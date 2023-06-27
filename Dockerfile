@@ -35,6 +35,17 @@ WORKDIR /var/www/html/
 RUN composer create-project craftcms/craft=^1 .
 COPY . .
 RUN chmod -R 777 /var/www/html/
+
+
+
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/web/cpresources
+RUN chmod -R 775 /var/www/html/storage /var/www/html/web/cpresources
+
+RUN sed -i '/App::run/a \\\n\t\tdefine("YII_DEBUG", true);\n\t\tdefine("YII_ENV", "dev");' /var/www/html/web/index.php
+
+
+
+
 # RUN composer global config --no-plugins allow-plugins.craftcms/plugin-installer true
 RUN cat composer.json
 # RUN composer global config --no-plugins allow-plugins.yiisoft/yii2-composer true
@@ -103,3 +114,4 @@ RUN sed -ri -e "s|/var/www/|${APACHE_DOCUMENT_ROOT}|g" /etc/apache2/apache2.conf
 RUN chown -R www-data:www-data /var/www/html/
 RUN chown -R www-data:www-data /var/www/html/craft
 RUN a2enmod rewrite
+# CMD ./craft plugin/install froala-editor
