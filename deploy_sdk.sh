@@ -25,6 +25,8 @@ DEPLOYMENT_SERVER=""
 SERVICE_NAME=""
 CONTAINER_NAME=""
 OLDEST_CONTAINER=""
+NETWORK_NAME=""
+IMG_NAME="$(echo "froala-${BUILD_REPO_NAME}_${TRAVIS_BRANCH}" | tr '[:upper:]' '[:lower:]')"
 
 # Copy the ssh key
 echo "${SSH_KEY}"  | base64 --decode > /tmp/sshkey.pem
@@ -84,6 +86,7 @@ function generate_container_name(){
         CT_INDEX=1
         CONTAINER_NAME="${LW_REPO_NAME}-${AO_IDENTIFIER}-${CT_INDEX}"
         SERVICE_NAME="${LW_REPO_NAME}-${LW_SHORT_TRAVIS_BRANCH}" 
+        
     else
         echo "Multiple deployments detected. Setting the container name (old and new)"
         CT_INDEX=${CT_HIGHER_INDEX} && CT_INDEX=$((CT_INDEX+1))
@@ -93,6 +96,7 @@ function generate_container_name(){
         echo "New index: ${CT_INDEX}"
 		DB_CONTAINER_NAME="${MYSQL_CONTAINER_NAME}-${CT_INDEX}"
         echo "service name : ${SERVICE_NAME} & container name : ${CONTAINER_NAME}"
+        NETWORK_NAME="${LW_REPO_NAME}-${LW_SHORT_TRAVIS_BRANCH}-${CT_LOWER_INDEX}_db_network_craft"
     fi
 }
 generate_container_name
@@ -109,7 +113,7 @@ echo "  Container name for this deployment:     ${CONTAINER_NAME}           "
 echo "----------------------------------------------------------------------"
 echo -e "\n"
 
-
+echo " network name  : ${NETWORK_NAME} " 
 # Set the deployment URL
 DEPLOYMENT_URL="${CONTAINER_NAME}.${SDK_ENVIRONMENT}.${BASE_DOMAIN}"
 
@@ -153,10 +157,7 @@ function deploy(){
     # Run docker-compose up on deployment_server
     ssh -o "StrictHostKeyChecking no" -i  /tmp/sshkey.pem "${SSH_USER}"@"${DEPLOYMENT_SERVER}" "cd /services/${SERVICE_NAME}/ && sudo docker-compose up -d --force-recreate"
     sleep 120
-    echo --------------------------------------
-    pwd
-    # docker exec -it 
-    # ./craft install/plugin froala-editor
+    
 
     RET_CODE=$(curl -k -s -o /tmp/notimportant.txt -w "%{http_code}" https://"${DEPLOYMENT_URL}/web/admin/install")
     echo "validation code: $RET_CODE for https://${DEPLOYMENT_URL}/web/admin/install"
@@ -191,8 +192,16 @@ if [ "${EXISTING_DEPLOYMENTS_NR}" -ge "${MAX_DEPLOYMENTS_NR}" ]; then
           echo "Successfully  removed the ${OLDEST_CONTAINER} container."
       fi
     fi
-    
-
+    if ! ssh -o "StrictHostKeyChecking no" -i  /tmp/sshkey.pem "${SSH_USER}"@"${DEPLOYMENT_SERVER}" "docker images --filter "dangling=true" |grep -i '${IMG_NAME}'| awk -F " " '{print$3}' | xargs -r docker rmi" ; then
+        echo "Failed to remove the old image"
+    else 
+        echo "Successfully removed the old image" 
+    fi
+    if ! ssh -o "StrictHostKeyChecking no" -i  /tmp/sshkey.pem "${SSH_USER}"@"${DEPLOYMENT_SERVER}" "docker network ls | grep -i '${NETWORK_NAME}' |awk -F " " '{print$1}' | xargs -r docker network rm" ; then
+        echo "failed to remove the network "
+    else
+        echo "Successfully remove network ${NETWORK_NAME} . "
+    fi
     echo "Deploying the service: ${SERVICE_NAME}"
     deploy && sleep 30
     echo "Deployment completed."
