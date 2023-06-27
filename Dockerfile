@@ -160,7 +160,7 @@ RUN composer update
 
 RUN composer clear-cache
 
-RUN composer global require froala/craft-froala-wysiwyg
+RUN composer global require froala/craft-froala-wysiwyg:4.0.17
 
 # RUN composer require froala/wysiwyg-editor
 
@@ -172,7 +172,7 @@ RUN cat composer.json
 
 
 
-RUN composer install
+# RUN composer install
 
 RUN mkdir -p /var/www/html/vendor/froala/craft-froala-wysiwyg
 
