@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  ServiceName:
+    depends_on:
+      - dbcraft
+    restart: unless-stopped
+    image: ImageName
+    container_name: ContainerName
+    pull_policy: always
+    networks:
+      - caddy
+      - db_network_craft
+    environment:
+      ENVIRONMENT: dev
+      DB_SERVER: dbcraft
+      DB_USER: MysqlUser
+      DB_PASSWORD: MysqlPassword
+      DB_DATABASE: MysqlDatabase
+      DB_PORT: MysqlTcpPort
+      XDEBUG_ON: "yes"
+      XDEBUG_HOST: "host.docker.internal"
+      XDEBUG_IDEKEY: "PHPSTORM"
+
+    labels:
+      caddy_0: UrlName
+      caddy_0.reverse_proxy: "{{upstreams PortNum}}"
+      caddy_0.tls.ca: https://acme-staging-v02.api.letsencrypt.org/directory
+  dbcraft:
+    image: 'mysql:5.7'
+    pull_policy: always
+    restart: unless-stopped
+    container_name: MysqlContainerName
+    networks:
+      - db_network_craft
+    environment:
+      MYSQL_ROOT_PASSWORD: MysqlRootPassword
+      MYSQL_DATABASE: MysqlDatabase
+      MYSQL_USER: MysqlUser
+      MYSQL_PASSWORD: MysqlPassword
+      MYSQL_TCP_PORT: MysqlTcpPort
+
+networks:
+  caddy:
+    external: true
+  db_network_craft:
+    external: false

@@ -1,5 +1,115 @@
 # Craft CMS 3 - Froala WYSIWYG Editor Changelog
 
+- Updated editor to version 4.2.0 along with the plugin version
+## v4.2.0 - 2024-03-21
+
+- Updated editor to version 4.1.4 along with the plugin version
+## v4.1.4 - 2023-12-07
+
+- Updated editor to version 4.1.3 along with the plugin version
+## v4.1.3 - 2023-10-20
+
+- Updated editor to version 4.1.2 along with the plugin version
+## v4.1.2 - 2023-09-12
+
+- Updated editor to version 4.1.1 along with the plugin version
+## v4.1.1 - 2023-08-17
+
+- Updated editor to version 4.1.0 along with the plugin version
+## v4.1.0 - 2023-07-12
+
+- Updated editor to version 4.0.19 along with the plugin version
+## v4.0.19 - 2023-05-16
+
+- Updated editor to version 4.0.18 along with the plugin version
+## v4.0.18 - 2023-03-23
+
+- Updated editor to version 4.0.17 along with the plugin version
+## v4.0.17 - 2023-01-19
+
+- Updated editor to version 4.0.16 along with the plugin version
+## v4.0.16 - 2022-11-23
+
+- Updated editor to version 4.0.15 along with the plugin version
+## v4.0.15 - 2022-10-12
+
+- Updated editor to version 4.0.14 along with the plugin version
+## v4.0.14 - 2022-08-25
+
+- Updated editor to version 4.0.13 along with the plugin version
+## v4.0.13 - 2022-07-11
+
+- Updated editor to version 4.0.12 along with the plugin version
+## v4.0.12 - 2022-06-09
+
+- Updated editor to version 4.0.11 along with the plugin version
+## v4.0.11 - 2022-05-09
+
+- Updated editor to version 4.0.10 along with the plugin version
+## v4.0.10 - 2022-03-16
+
+- Updated editor to version 4.0.9 along with the plugin version
+## v4.0.9 - 2022-02-02
+
+- Updated editor to version 4.0.8 along with the plugin version
+## v4.0.8 - 2021-12-21
+
+- Updated editor to version 4.0.7 along with the plugin version
+## v4.0.7 - 2021-11-23
+
+- Updated editor to version 4.0.6 along with the plugin version
+## v4.0.6 - 2021-10-19
+
+- Updated editor to version 4.0.5 along with the plugin version
+## v4.0.5 - 2021-09-20
+
+- Updated editor to version 4.0.4 along with the plugin version
+## v4.0.4 - 2021-08-03
+
+- Updated editor to version 4.0.3 along with the plugin version
+## v4.0.3 - 2021-07-06
+
+- Updated editor to version 4.0.2 along with the plugin version
+## v4.0.2 - 2021-06-30
+
+- Updated editor to version 4.0.1 along with the plugin version
+## v4.0.1 - 2021-05-18
+
+- Updated editor to version 3.2.6-1 along with the plugin version
+## v3.2.6-1 - 2021-02-06
+
+- Updated editor to version 3.2.6 along with the plugin version
+## v3.2.6 - 2021-01-25
+
+### Changed
+
+
+- Updated editor to version 3.2.5-2 along with the plugin version
+## v3.2.5-2 - 2021-01-06
+
+
+### Changed
+
+- Updated editor to version 3.2.5-1 along with the plugin version
+
+## v3.2.1 - 2020-08-05
+
+### Changed
+
+- Updated editor to version 3.2.1 along with the plugin version
+
+## v3.2.0 - 2020-07-23
+
+### Changed
+
+- Updated editor to version 3.2.0 along with the plugin version
+
+## v3.1.0 - 2020-01-28
+
+### Changed
+
+- Updated editor to version 3.1.0 along with the plugin version
+
 ## v2.9.5 - 2019-06-08
 
 ### Changed

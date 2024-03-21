@@ -81,16 +81,16 @@
             }
         },
         assembleToolbarButtons: function () {
-            if (typeof this.config.toolbarButtons === 'undefined') {
+            if (typeof this.config.toolbarButtons === undefined) {
                 this.config.toolbarButtons = this.getToolbarButtons('lg');
             }
-            if (typeof this.config.toolbarButtonsMD === 'undefined') {
+            if (typeof this.config.toolbarButtonsMD === undefined) {
                 this.config.toolbarButtonsMD = this.getToolbarButtons('md');
             }
-            if (typeof this.config.toolbarButtonsSM === 'undefined') {
+            if (typeof this.config.toolbarButtonsSM === undefined) {
                 this.config.toolbarButtonsSM = this.getToolbarButtons('sm');
             }
-            if (typeof this.config.toolbarButtonsXS === 'undefined') {
+            if (typeof this.config.toolbarButtonsXS === undefined) {
                 this.config.toolbarButtonsXS = this.getToolbarButtons('xs');
             }
 
@@ -127,6 +127,8 @@
                 'quote',
                 'insertHR',
                 '-',
+                'trackChanges',
+                'markdown',
                 'insertLink',
                 'insertImage',
                 'insertVideo',
@@ -167,6 +169,8 @@
                         'quote',
                         'insertHR',
                         '|',
+                        'trackChanges',
+                        'markdown',
                         'insertLink',
                         'insertImage',
                         'insertVideo',
@@ -189,6 +193,8 @@
                         'redo',
                         'fontFamily',
                         'fontSize',
+                        'trackChanges',
+                        'markdown',
                         'insertLink',
                         'insertImage',
                         'insertVideo',
@@ -201,6 +207,8 @@
                         'italic',
                         'undo',
                         'redo',
+                        'trackChanges',
+                        'markdown',
                         'insertLink',
                         'insertImage',
                         'insertVideo'
