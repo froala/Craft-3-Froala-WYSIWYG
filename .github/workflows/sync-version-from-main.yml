@@ -1,8 +1,9 @@
-name: Sync Version from Main Repo
+name: sync-version-from-main-repo
 
 on:
   repository_dispatch:
-    types: [sync-version]
+    types:
+      - sync-version
 
 permissions:
   contents: write
@@ -17,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # Ensure full history if needed
+          fetch-depth: 0
 
       # 2) Read incoming version from dispatch event
       - name: Set VERSION from dispatch event
@@ -28,7 +29,6 @@ jobs:
 
       # 3) Read local version from composer.json
       - name: Read current local version
-        id: local
         run: |
           CURRENT=$(jq -r '.version' composer.json)
           echo "CURRENT_VERSION=$CURRENT" >> "$GITHUB_ENV"
@@ -79,7 +79,7 @@ jobs:
         if: env.VERSION != env.CURRENT_VERSION
         run: |
           gh pr create \
-            --base main \
+            --base master \
             --head "${{ env.BRANCH }}" \
             --title "Sync version to v${{ env.VERSION }}" \
             --body "Auto-synced version update."
