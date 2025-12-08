@@ -8,7 +8,7 @@ __[Check the Craft CMS v2 version here](https://github.com/froala/Craft-Froala-W
 
 ## Installation
 
-You can install this plugin from the Plugin Store or with Composer.
+You can install this plugin from the Plugin Store or with Composer. 
 
 #### From the Plugin Store
 
