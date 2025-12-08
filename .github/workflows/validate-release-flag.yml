@@ -1,17 +1,20 @@
-name: Validate Release Flag
+name: validate-release-flag
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types:
+      - opened
+      - synchronize
+      - reopened
     branches:
       - master
 
 jobs:
-  validate_pr:
+  check-release-flag:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check PR title/body for 'release: yes' 
+      - name: Check PR title/body for release flag
         run: |
           TITLE="${{ github.event.pull_request.title }}"
           BODY="${{ github.event.pull_request.body }}"
@@ -20,12 +23,12 @@ jobs:
           echo "PR body:  $BODY"
 
           if echo "$TITLE" | grep -iq "release: yes"; then
-            echo "✅ Valid: 'release: yes' found in title."
+            echo "Valid: 'release: yes' found in title."
             exit 0
           fi
 
           if echo "$BODY" | grep -iq "release: yes"; then
-            echo "✅ Valid: 'release: yes' found in body."
+            echo "Valid: 'release: yes' found in body."
             exit 0
           fi
 
