@@ -1,0 +1,44 @@
+name: Auto Release on Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  create_release:
+    # Only when PR is merged AND contains 'release: yes' (case-insensitive)
+    if: >
+      github.event.pull_request.merged == true &&
+      (
+        contains(toLower(github.event.pull_request.title), 'release: yes') ||
+        contains(toLower(github.event.pull_request.body), 'release: yes')
+      )
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Extract version from composer.json
+        id: version
+        run: |
+          VERSION=$(jq -r '.version' composer.json)
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "Detected version from composer.json: $VERSION"
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "v${{ env.VERSION }}"
+          release_name: "Release v${{ env.VERSION }}"
+          body: |
+            Auto-release generated for version v${{ env.VERSION }}.
