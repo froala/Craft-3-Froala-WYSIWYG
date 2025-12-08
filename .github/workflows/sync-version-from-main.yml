@@ -1,0 +1,87 @@
+name: Sync Version from Main Repo
+
+on:
+  repository_dispatch:
+    types: [sync-version]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync_version:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # Ensure full history if needed
+
+      # 2) Read incoming version from dispatch event
+      - name: Set VERSION from dispatch event
+        run: |
+          VERSION="${{ github.event.client_payload.version }}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "Incoming version from main repo: $VERSION"
+
+      # 3) Read local version from composer.json
+      - name: Read current local version
+        id: local
+        run: |
+          CURRENT=$(jq -r '.version' composer.json)
+          echo "CURRENT_VERSION=$CURRENT" >> "$GITHUB_ENV"
+          echo "Local version:   $CURRENT"
+          echo "Incoming version: $VERSION"
+
+      # 4) Log decision: match or not
+      - name: Log version comparison
+        run: |
+          if [ "${{ env.VERSION }}" = "${{ env.CURRENT_VERSION }}" ]; then
+            echo "✔ Versions match → No PR will be created."
+          else
+            echo "ℹ Versions differ → A sync PR will be created."
+          fi
+
+      # 5) Create feature branch (only if versions differ)
+      - name: Create new branch
+        if: env.VERSION != env.CURRENT_VERSION
+        run: |
+          BRANCH="sync-version-v${{ env.VERSION }}"
+          git checkout -b "$BRANCH"
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+          echo "Created branch: $BRANCH"
+
+      # 6) Update composer.json (only if versions differ)
+      - name: Update composer.json
+        if: env.VERSION != env.CURRENT_VERSION
+        run: |
+          jq ".version = \"${{ env.VERSION }}\"" composer.json > tmp.json
+          mv tmp.json composer.json
+          echo "Updated composer.json to version ${{ env.VERSION }}"
+
+      # 7) Commit + push changes (only if versions differ)
+      - name: Commit and Push
+        if: env.VERSION != env.CURRENT_VERSION
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "ci-bot@github.com"
+
+          git add composer.json
+          git commit -m "chore: sync version to v${{ env.VERSION }}"
+          git push origin "${{ env.BRANCH }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 8) Create Pull Request using GH CLI (only if versions differ)
+      - name: Create Pull Request using GH CLI
+        if: env.VERSION != env.CURRENT_VERSION
+        run: |
+          gh pr create \
+            --base main \
+            --head "${{ env.BRANCH }}" \
+            --title "Sync version to v${{ env.VERSION }}" \
+            --body "Auto-synced version update."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
