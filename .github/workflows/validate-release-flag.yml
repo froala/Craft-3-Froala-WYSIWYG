@@ -1,0 +1,33 @@
+name: Validate Release Flag
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  validate_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR title/body for 'release: yes'
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          BODY="${{ github.event.pull_request.body }}"
+
+          echo "PR title: $TITLE"
+          echo "PR body:  $BODY"
+
+          if echo "$TITLE" | grep -iq "release: yes"; then
+            echo "✅ Valid: 'release: yes' found in title."
+            exit 0
+          fi
+
+          if echo "$BODY" | grep -iq "release: yes"; then
+            echo "✅ Valid: 'release: yes' found in body."
+            exit 0
+          fi
+
+          echo "::error::PR cannot be merged because it does not contain 'release: yes' in the title or body"
+          exit 1
