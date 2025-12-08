@@ -1,8 +1,9 @@
-name: Auto Release on Merge
+name: auto-release-on-merge
 
 on:
   pull_request:
-    types: [closed]
+    types:
+      - closed
     branches:
       - master
 
@@ -11,22 +12,39 @@ permissions:
 
 jobs:
   create_release:
-    # Only when PR is merged AND contains 'release: yes' (case-insensitive)
-    if: >
-      github.event.pull_request.merged == true &&
-      (
-        contains(toLower(github.event.pull_request.title), 'release: yes') ||
-        contains(toLower(github.event.pull_request.body), 'release: yes')
-      )
+    # Only when PR is merged; flag check is done inside the job
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
+      - id: check_flag
+        name: Decide if release should be created
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          BODY="${{ github.event.pull_request.body }}"
+
+          echo "PR title: $TITLE"
+          echo "PR body:  $BODY"
+
+          if echo "$TITLE" | grep -iq "release: yes"; then
+            echo "SHOULD_RELEASE=true" >> "$GITHUB_OUTPUT"
+            echo "release: yes found in title"
+          elif echo "$BODY" | grep -iq "release: yes"; then
+            echo "SHOULD_RELEASE=true" >> "$GITHUB_OUTPUT"
+            echo "release: yes found in body"
+          else
+            echo "SHOULD_RELEASE=false" >> "$GITHUB_OUTPUT"
+            echo "No release flag found, skipping release creation."
+          fi
+
       - name: Checkout repo
+        if: steps.check_flag.outputs.SHOULD_RELEASE == 'true'
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: master
 
       - name: Extract version from composer.json
+        if: steps.check_flag.outputs.SHOULD_RELEASE == 'true'
         id: version
         run: |
           VERSION=$(jq -r '.version' composer.json)
@@ -34,11 +52,12 @@ jobs:
           echo "Detected version from composer.json: $VERSION"
 
       - name: Create GitHub Release
+        if: steps.check_flag.outputs.SHOULD_RELEASE == 'true'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v${{ env.VERSION }}"
-          release_name: "Release v${{ env.VERSION }}"
+          tag_name: "v{{ env.VERSION }}"
+          release_name: "Release v{{ env.VERSION }}"
           body: |
-            Auto-release generated for version v${{ env.VERSION }}.
+            Auto-release generated for version v{{ env.VERSION }}.
