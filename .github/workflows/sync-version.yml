@@ -69,14 +69,22 @@ jobs:
          
      - name: Update composer.json
        run: |
-         jq --arg VERSION "$VERSION" '.version = $VERSION | .dependencies["froala-editor"] = $VERSION' composer.json > tmp.json
+         jq --arg v "$VERSION" \
+            '.version = $v | .require["froala/wysiwyg-editor"] = $v' \
+            composer.json > tmp.json
          mv tmp.json composer.json
-         
+
+     - name: Update CHANGELOG.md
+       run: |
+         RELEASE_DATE=$(date +%Y-%m-%d)
+         sed -i "2a\\- Updated editor to version ${VERSION} along with the plugin version\\## v${VERSION} - ${RELEASE_DATE}\\" CHANGELOG.md
+     
      - name: Commit changes
        run: |
          git config user.name "froala-travis-bot"
          git config user.email "froala_git_travis_bot@idera.com"
          git add composer.json
+         git add CHANGELOG.md
          git commit -m "update composer.json to v${VERSION}" || echo "Nothing to commit"
          git push origin "$BRANCH"
          
